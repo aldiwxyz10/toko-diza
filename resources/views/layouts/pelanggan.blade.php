@@ -147,8 +147,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('pelanggan.katalog') }}">
-                🏪 Toko Plastik Diza
+            <a class="navbar-brand" href="{{ route('dashboard') }}">
+                🏪 Dashboard Admin
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -179,7 +179,7 @@
                 <div class="col-md-3">
                     <h6>Link Cepat</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('pelanggan.katalog') }}">Katalog Produk</a></li>
+                        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li><a href="{{ route('login') }}">Admin Login</a></li>
                     </ul>
                 </div>

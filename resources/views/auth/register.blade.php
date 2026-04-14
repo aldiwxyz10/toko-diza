@@ -60,9 +60,6 @@
                     <p class="mb-0">Sudah punya akun?
                         <a href="{{ route('login') }}">Login di sini</a>
                     </p>
-                    <a href="{{ route('pelanggan.katalog') }}" class="btn btn-outline-secondary btn-sm mt-2">
-                        <i class="fas fa-store me-1"></i>Kembali ke Katalog
-                    </a>
                 </div>
             </div>
         </div>

@@ -34,11 +34,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <span class="navbar-text text-light ms-auto me-4">
-                <strong>ADMIN PANEL</strong> - Sistem Pengelolaan Stok
+                <strong>DASHBOARD ADMIN</strong> - Kelola Stok & Pembayaran
             </span>
-            <a href="{{ route('pelanggan.katalog') }}" class="btn btn-outline-light btn-sm me-2" target="_blank">
-                👥 Lihat Katalog Pelanggan
-            </a>
             @auth
                 <div class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">

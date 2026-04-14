@@ -49,9 +49,7 @@
                     </form>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('pelanggan.katalog') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-store me-1"></i>Kembali ke Katalog
-                    </a>
+                    <p class="mb-0 text-muted">Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
                 </div>
             </div>
         </div>

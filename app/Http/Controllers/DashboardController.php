@@ -15,12 +15,30 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // Statistik Umum
         $totalBarang = Barang::count();
         $totalKategori = Kategori::count();
         $totalStok = Barang::sum('stok');
-        $transaksiHariIni = StokMasuk::whereDate('tanggal', today())->count() + 
-                            StokKeluar::whereDate('tanggal', today())->count();
+        $stokHabis = Barang::where('stok', '<=', 0)->count();
+        $stokMenipis = Barang::where('stok', '>', 0)->where('stok', '<', 10)->count();
 
-        return view('dashboard', compact('totalBarang', 'totalKategori', 'totalStok', 'transaksiHariIni'));
+        // Daftar barang dengan stok rendah (< 10)
+        $barangStokRendah = Barang::where('stok', '<', 10)
+            ->with('kategori')
+            ->orderBy('stok', 'asc')
+            ->get();
+
+        // Daftar semua barang untuk monitoring
+        $semuaBarang = Barang::with('kategori')->orderBy('nama_barang')->get();
+
+        return view('dashboard', compact(
+            'totalBarang',
+            'totalKategori',
+            'totalStok',
+            'stokHabis',
+            'stokMenipis',
+            'barangStokRendah',
+            'semuaBarang'
+        ));
     }
 }
