@@ -29,9 +29,34 @@
         <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
             🏪 Toko Plastik Diza
         </a>
-        <span class="navbar-text text-light ms-auto">
-            Sistem Pengelolaan Stok Barang
-        </span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <span class="navbar-text text-light ms-auto me-4">
+                <strong>ADMIN PANEL</strong> - Sistem Pengelolaan Stok
+            </span>
+            <a href="{{ route('pelanggan.katalog') }}" class="btn btn-outline-light btn-sm me-2" target="_blank">
+                👥 Lihat Katalog Pelanggan
+            </a>
+            @auth
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        👤 {{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><span class="dropdown-header">{{ auth()->user()->email }}</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item">🚪 Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @endauth
+        </div>
     </div>
 </nav>
 

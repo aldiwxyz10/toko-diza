@@ -17,6 +17,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create admin user if not exists
+        if (!User::where('email', 'admin@example.com')->exists()) {
+            User::create([
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]);
+        }
+
         // Create sample categories
         $kategori1 = Kategori::create([
             'nama_kategori' => 'Kantong Plastik',
@@ -40,6 +50,8 @@ class DatabaseSeeder extends Seeder
             'id_kategori' => $kategori1->id_kategori,
             'harga' => 1500.00,
             'stok' => 100,
+            'satuan' => 'pcs',
+            'deskripsi' => 'Kantong plastik tebal berkualitas tinggi ukuran 25x35 cm',
         ]);
 
         Barang::create([
@@ -47,6 +59,35 @@ class DatabaseSeeder extends Seeder
             'id_kategori' => $kategori1->id_kategori,
             'harga' => 2000.00,
             'stok' => 75,
+            'satuan' => 'pcs',
+            'deskripsi' => 'Kantong plastik mika transparan ukuran 20x30 cm',
+        ]);
+
+        Barang::create([
+            'nama_barang' => 'Gelas Plastik 300ml',
+            'id_kategori' => $kategori2->id_kategori,
+            'harga' => 500.00,
+            'stok' => 200,
+            'satuan' => 'pcs',
+            'deskripsi' => 'Gelas plastik berkualitas tinggi kapasitas 300ml',
+        ]);
+
+        Barang::create([
+            'nama_barang' => 'Wadah Plastik Kotak',
+            'id_kategori' => $kategori3->id_kategori,
+            'harga' => 3000.00,
+            'stok' => 50,
+            'satuan' => 'pcs',
+            'deskripsi' => 'Wadah plastik kotak multifungsi',
+        ]);
+
+        Barang::create([
+            'nama_barang' => 'Pita Plastik Roll 5cm',
+            'id_kategori' => $kategori4->id_kategori,
+            'harga' => 25000.00,
+            'stok' => 20,
+            'satuan' => 'roll',
+            'deskripsi' => 'Pita plastik roll lebar 5cm untuk berbagai keperluan',
         ]);
 
         Barang::create([
@@ -89,13 +130,6 @@ class DatabaseSeeder extends Seeder
             'id_kategori' => $kategori4->id_kategori,
             'harga' => 6500.00,
             'stok' => 60,
-        ]);
-
-        // Create admin user (optional)
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
         ]);
     }
 }

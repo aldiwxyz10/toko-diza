@@ -11,7 +11,9 @@ class Kategori extends Model
 
     protected $table = 'kategoris';
     protected $primaryKey = 'id_kategori';
-    protected $guarded = [];
+    protected $fillable = [
+        'nama_kategori',
+    ];
 
     /**
      * Relasi one-to-many dengan Barang
