@@ -36,6 +36,9 @@ class BarangMasukController extends Controller
 
     public function store(Request $request)
     {
+        $barang = Barang::find($request->barang_id);
+        $barang->increment('stok', $request->jumlah); // Ini akan menambah stok otomatis
+        
         $validated = $request->validate([
             'barang_id'  => 'required|exists:barangs,id',
             'jumlah'     => 'required|integer|min:1',
