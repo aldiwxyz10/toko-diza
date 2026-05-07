@@ -1,113 +1,140 @@
-@extends('layouts.app')
-@section('title', 'Laporan Stok')
-@section('breadcrumb')
-    <li class="breadcrumb-item active">Laporan Stok</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Laporan Stok</x-slot>
+    <x-slot name="header">Laporan Stok Barang</x-slot>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="fw-bold mb-0"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Laporan Stok Barang</h4>
-    <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
-        <i class="bi bi-printer me-1"></i> Cetak
-    </button>
-</div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Summary Cards -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col justify-center">
+            <p class="text-sm font-medium text-slate-500 mb-1">Total Nilai Aset</p>
+            <h3 class="text-3xl font-bold text-slate-800">Rp {{ number_format($totalNilai, 0, ',', '.') }}</h3>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col justify-center">
+            <p class="text-sm font-medium text-slate-500 mb-1">Total Jenis Barang</p>
+            <h3 class="text-3xl font-bold text-slate-800">{{ $jenis->count() }} <span class="text-sm font-normal text-slate-400">Kategori</span></h3>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Ekspor Laporan</p>
+                <button onclick="window.print()" class="mt-2 inline-flex items-center px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-medium">
+                    <i class="bi bi-printer mr-2"></i> Cetak PDF
+                </button>
+            </div>
+            <i class="bi bi-file-earmark-pdf text-4xl text-red-100"></i>
+        </div>
+    </div>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <form method="GET" class="row g-2 align-items-end">
-            <div class="col-md-3">
-                <select name="jenis" class="form-select form-select-sm">
-                    <option value="">-- Semua Jenis --</option>
+    <!-- Chart.js Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h4 class="font-semibold text-slate-800"><i class="bi bi-bar-chart-fill text-blue-500 mr-2"></i> Grafik Stok Barang</h4>
+        </div>
+        <div class="p-6">
+            <canvas id="stokChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-4">
+            <h3 class="text-lg font-semibold text-slate-800">Rincian Stok Barang</h3>
+            <!-- Filter Form -->
+            <form action="{{ route('laporan.stok') }}" method="GET" class="flex items-center gap-2">
+                <select name="jenis" class="text-sm border-slate-200 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Semua Jenis</option>
                     @foreach($jenis as $j)
                         <option value="{{ $j }}" {{ request('jenis') == $j ? 'selected' : '' }}>{{ $j }}</option>
                     @endforeach
                 </select>
-            </div>
-            <div class="col-md-3">
-                <select name="status" class="form-select form-select-sm">
-                    <option value="">-- Semua Status --</option>
-                    <option value="tersedia" {{ request('status') == 'tersedia' ? 'selected' : '' }}>Tersedia (>5)</option>
-                    <option value="menipis"  {{ request('status') == 'menipis'  ? 'selected' : '' }}>Menipis (1-5)</option>
-                    <option value="habis"    {{ request('status') == 'habis'    ? 'selected' : '' }}>Habis (0)</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-sm btn-primary"><i class="bi bi-filter"></i> Filter</button>
-                <a href="{{ route('laporan.stok') }}" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row g-3 mb-3">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body py-3">
-                <h4 class="fw-bold mb-0">{{ $barangs->count() }}</h4>
-                <small class="text-muted">Total Item</small>
-            </div>
+                <button type="submit" class="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
+                    <i class="bi bi-filter"></i> Filter
+                </button>
+            </form>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body py-3">
-                <h4 class="fw-bold mb-0">{{ number_format($barangs->sum('stok')) }}</h4>
-                <small class="text-muted">Total Unit Stok</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body py-3">
-                <h4 class="fw-bold mb-0">Rp {{ number_format($totalNilai, 0, ',', '.') }}</h4>
-                <small class="text-muted">Total Nilai Stok</small>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
                     <tr>
-                        <th>#</th><th>Kode</th><th>Nama Barang</th><th>Jenis</th>
-                        <th class="text-center">Stok</th><th class="text-center">Status</th>
-                        <th class="text-end">Harga</th><th class="text-end">Nilai Stok</th>
+                        <th class="px-6 py-4 font-semibold">Kode</th>
+                        <th class="px-6 py-4 font-semibold">Nama Barang</th>
+                        <th class="px-6 py-4 font-semibold">Jenis</th>
+                        <th class="px-6 py-4 font-semibold">Stok Saat Ini</th>
+                        <th class="px-6 py-4 font-semibold">Harga Satuan</th>
+                        <th class="px-6 py-4 font-semibold text-right">Nilai Total</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse($barangs as $i => $barang)
-                    <tr>
-                        <td class="text-muted">{{ $i + 1 }}</td>
-                        <td><span class="badge bg-light text-dark">{{ $barang->kode_barang }}</span></td>
-                        <td class="fw-semibold">{{ $barang->nama_barang }}</td>
-                        <td>{{ $barang->jenis }}</td>
-                        <td class="text-center fw-bold">{{ number_format($barang->stok) }}</td>
-                        <td class="text-center">
-                            <span class="badge rounded-pill bg-{{ $barang->status_badge }}">
-                                {{ ucfirst($barang->status_stok) }}
-                            </span>
-                        </td>
-                        <td class="text-end">Rp {{ number_format($barang->harga, 0, ',', '.') }}</td>
-                        <td class="text-end fw-semibold">Rp {{ number_format($barang->stok * $barang->harga, 0, ',', '.') }}</td>
-                    </tr>
+                <tbody class="divide-y divide-slate-100">
+                    @forelse($barangs as $barang)
+                        <tr class="hover:bg-slate-50 transition-colors {{ $barang->stok == 0 ? 'bg-red-50' : '' }}">
+                            <td class="px-6 py-4 font-mono text-xs text-slate-500">{{ $barang->kode_barang }}</td>
+                            <td class="px-6 py-4 font-medium text-slate-800">{{ $barang->nama_barang }}</td>
+                            <td class="px-6 py-4 text-slate-600">{{ $barang->jenis }}</td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $barang->stok == 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
+                                    {{ $barang->stok }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">Rp {{ number_format($barang->harga, 0, ',', '.') }}</td>
+                            <td class="px-6 py-4 text-right font-medium text-slate-800">Rp {{ number_format($barang->stok * $barang->harga, 0, ',', '.') }}</td>
+                        </tr>
                     @empty
-                    <tr><td colspan="8" class="text-center text-muted py-4">Tidak ada data</td></tr>
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-500">Tidak ada data untuk filter yang dipilih.</td>
+                        </tr>
                     @endforelse
                 </tbody>
-                @if($barangs->count())
-                <tfoot class="table-light fw-bold">
-                    <tr>
-                        <td colspan="7" class="text-end">Total Nilai Stok:</td>
-                        <td class="text-end text-primary">Rp {{ number_format($totalNilai, 0, ',', '.') }}</td>
-                    </tr>
-                </tfoot>
-                @endif
             </table>
         </div>
     </div>
-</div>
 
-@endsection
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('stokChart').getContext('2d');
+            
+            // Prepare the dynamic data passed from controller
+            const labels = {!! $chartLabels !!};
+            const data = {!! $chartData !!};
+            
+            // Background colors (generates an array of colors)
+            const bgColors = data.map(val => val < 5 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(59, 130, 246, 0.7)');
+            const borderColors = data.map(val => val < 5 ? 'rgb(220, 38, 38)' : 'rgb(37, 99, 235)');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Stok',
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderColor: borderColors,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Stok: ' + context.parsed.y + ' Unit';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endpush
+</x-app-layout>

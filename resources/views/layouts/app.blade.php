@@ -1,194 +1,211 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name', 'Inventory Toko Plastik'))</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>{{ config('app.name', 'Inventory') }} - {{ $title ?? '' }}</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     
-    <style>
-        :root { --sidebar-width: 250px; --sidebar-bg: #1a2332; --sidebar-hover: #243447; }
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', system-ui, sans-serif; }
-        
-        #sidebar { width: var(--sidebar-width); min-height: 100vh; background: var(--sidebar-bg);
-                   position: fixed; top: 0; left: 0; z-index: 1000; overflow-y: auto; transition: transform 0.3s ease; }
-        #sidebar .brand { padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,.1); }
-        #sidebar .brand h5 { color: #fff; font-weight: 700; margin: 0; font-size: .95rem; }
-        #sidebar .brand small { color: rgba(255,255,255,.5); font-size: .75rem; }
-        #sidebar .nav-link { color: rgba(255,255,255,.75); padding: .6rem 1.5rem; font-size: .875rem;
-                             display: flex; align-items: center; gap: .6rem; transition: all .2s; }
-        #sidebar .nav-link:hover, #sidebar .nav-link.active { color: #fff; background: var(--sidebar-hover);
-                                                              border-left: 3px solid #0d6efd; }
-        #sidebar .nav-section { padding: .75rem 1.5rem .25rem; font-size: .7rem; font-weight: 600;
-                                color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .08em; }
-        
-        #main-content { margin-left: var(--sidebar-width); min-height: 100vh; transition: margin-left 0.3s ease; }
-        .topbar { background: #fff; border-bottom: 1px solid #e9ecef; padding: .75rem 1.5rem;
-                  position: sticky; top: 0; z-index: 999; }
-        .page-content { padding: 1.5rem; }
-        
-        .stat-card, .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-        .card-header { background: transparent; border-bottom: 1px solid #f0f2f5;
-                       padding: 1rem 1.25rem; font-weight: 600; }
-        .table th { font-weight: 600; font-size: .8rem; text-transform: uppercase;
-                    letter-spacing: .04em; color: #6c757d; }
-        
-        @media (max-width: 768px) {
-            #sidebar { transform: translateX(-100%); }
-            #sidebar.show { transform: translateX(0); }
-            #main-content { margin-left: 0; }
-        }
-    </style>
-    @stack('styles')
-</head>
-<body>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<nav id="sidebar">
-    <div class="brand">
-        <h5><i class="bi bi-box-seam-fill text-primary me-2"></i>Toko Plastik</h5>
-        <small>Inventory System</small>
-    </div>
-    <ul class="nav flex-column mt-2">
-        <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
-        </li>
-        <li class="mt-2"><span class="nav-section">Inventory</span></li>
-        <li class="nav-item">
-            <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
-                <i class="bi bi-box-seam"></i> Data Barang
-            </a>
-        </li>
-        
-        @if(auth()->user()->role === 'admin')
-        <li class="nav-item">
-            <a href="{{ route('barang-masuk.index') }}" class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
-                <i class="bi bi-box-arrow-in-down"></i> Barang Masuk
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('barang-keluar.index') }}" class="nav-link {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}">
-                <i class="bi bi-box-arrow-up"></i> Barang Keluar
-            </a>
-        </li>
-        @endif
-
-        <li class="nav-item">
-            <a href="{{ route('request.index') }}" class="nav-link {{ request()->routeIs('request.*') ? 'active' : '' }}">
-                <i class="bi bi-clipboard-check"></i> Request Stock
-                @if(auth()->user()->role === 'admin')
-                    @php 
-                        $pending = class_exists('\App\Models\RequestStock') ? \App\Models\RequestStock::where('status','pending')->count() : 0; 
-                    @endphp
-                    @if($pending > 0)<span class="badge bg-danger ms-auto">{{ $pending }}</span>@endif
-                @endif
-            </a>
-        </li>
-        
-        @if(auth()->user()->role === 'admin')
-        <li class="mt-2"><span class="nav-section">Laporan</span></li>
-        <li class="nav-item">
-            <a href="{{ route('laporan.stok') }}" class="nav-link {{ request()->routeIs('laporan.stok') ? 'active' : '' }}">
-                <i class="bi bi-bar-chart-line"></i> Laporan Stok
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('laporan.masuk') }}" class="nav-link {{ request()->routeIs('laporan.masuk') ? 'active' : '' }}">
-                <i class="bi bi-graph-up-arrow"></i> Laporan Masuk
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('laporan.keluar') }}" class="nav-link {{ request()->routeIs('laporan.keluar') ? 'active' : '' }}">
-                <i class="bi bi-graph-down-arrow"></i> Laporan Keluar
-            </a>
-        </li>
-        <li class="mt-2"><span class="nav-section">Manajemen</span></li>
-        <li class="nav-item">
-            <a href="{{ route('user.index') }}" class="nav-link {{ request()->routeIs('user.*') ? 'active' : '' }}">
-                <i class="bi bi-people"></i> Manajemen User
-            </a>
-        </li>
-        @endif
-    </ul>
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <div class="p-3 border-top border-secondary mt-3">
-        <div class="d-flex align-items-center gap-2">
-            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white"
-                 style="width:32px;height:32px;font-size:.8rem;flex-shrink:0;">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="font-sans antialiased bg-slate-50 text-slate-800">
+    <div class="min-h-screen flex">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white flex-shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-xl flex flex-col" id="sidebar">
+            <div class="h-16 flex items-center px-6 border-b border-slate-800 flex-shrink-0">
+                <i class="bi bi-box-seam-fill text-blue-500 text-xl mr-3"></i>
+                <span class="text-lg font-bold tracking-wide">Toko Diza</span>
             </div>
-            <div>
-                <div class="text-white text-truncate" style="font-size:.8rem;font-weight:600;">{{ auth()->user()->name }}</div>
-                <div class="text-secondary" style="font-size:.7rem;">{{ ucfirst(auth()->user()->role) }}</div>
+            
+            <div class="p-4 flex-1 overflow-y-auto pb-20">
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-2 px-3">Menu Utama</p>
+                
+                @if(auth()->user()->isAdmin())
+                    <x-nav-link href="{{ route('dashboard.admin') }}" :active="request()->routeIs('dashboard.admin')">
+                        <i class="bi bi-speedometer2 text-lg"></i> Dashboard
+                    </x-nav-link>
+                @else
+                    <x-nav-link href="{{ route('dashboard.user') }}" :active="request()->routeIs('dashboard.user')">
+                        <i class="bi bi-speedometer2 text-lg"></i> Dashboard
+                    </x-nav-link>
+                @endif
+                
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Inventory</p>
+                <x-nav-link href="{{ route('barang.index') }}" :active="request()->routeIs('barang.*')">
+                    <i class="bi bi-box-seam text-lg"></i> Data Barang
+                </x-nav-link>
+                
+                @if(auth()->user()->isAdmin())
+                <x-nav-link href="{{ route('barang-masuk.index') }}" :active="request()->routeIs('barang-masuk.*')">
+                    <i class="bi bi-box-arrow-in-down text-lg"></i> Barang Masuk
+                </x-nav-link>
+                <x-nav-link href="{{ route('barang-keluar.index') }}" :active="request()->routeIs('barang-keluar.*')">
+                    <i class="bi bi-box-arrow-up text-lg"></i> Barang Keluar
+                </x-nav-link>
+                @endif
+                
+                <x-nav-link href="{{ route('request.index') }}" :active="request()->routeIs('request.*')">
+                    <i class="bi bi-clipboard-check text-lg"></i> Request Stock
+                    @if(auth()->user()->isAdmin())
+                        @php $pending = \App\Models\RequestStock::where('status','pending')->count() @endphp
+                        @if($pending > 0)
+                            <span class="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{{ $pending }}</span>
+                        @endif
+                    @endif
+                </x-nav-link>
+                
+                @if(auth()->user()->isAdmin())
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Laporan</p>
+                <x-nav-link href="{{ route('laporan.stok') }}" :active="request()->routeIs('laporan.stok')">
+                    <i class="bi bi-bar-chart-line text-lg"></i> Laporan Stok
+                </x-nav-link>
+                <x-nav-link href="{{ route('laporan.masuk') }}" :active="request()->routeIs('laporan.masuk')">
+                    <i class="bi bi-graph-up-arrow text-lg"></i> Laporan Masuk
+                </x-nav-link>
+                <x-nav-link href="{{ route('laporan.keluar') }}" :active="request()->routeIs('laporan.keluar')">
+                    <i class="bi bi-graph-down-arrow text-lg"></i> Laporan Keluar
+                </x-nav-link>
+                
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sistem</p>
+                <x-nav-link href="{{ route('user.index') }}" :active="request()->routeIs('user.*')">
+                    <i class="bi bi-people text-lg"></i> Manajemen User
+                </x-nav-link>
+                @endif
             </div>
+            
+            <div class="absolute bottom-0 w-full border-t border-slate-800 p-4 bg-slate-900 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.3)]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-inner flex-shrink-0">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
+                        <p class="text-xs text-slate-400 truncate">{{ ucfirst(auth()->user()->role) }}</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Sidebar overlay for mobile -->
+        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden md:hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 md:ml-64 flex flex-col min-h-screen transition-all duration-300 w-full">
+            <!-- Topbar -->
+            <header class="h-16 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 z-30 sticky top-0">
+                <div class="flex items-center gap-4">
+                    <button class="md:hidden text-slate-500 hover:text-slate-800 p-1" onclick="toggleSidebar()">
+                        <i class="bi bi-list text-2xl"></i>
+                    </button>
+                    @if(isset($header))
+                        <div class="font-semibold text-xl text-slate-800 leading-tight">
+                            {{ $header }}
+                        </div>
+                    @elseif(isset($title))
+                        <h2 class="font-semibold text-xl text-slate-800 leading-tight">
+                            {{ $title }}
+                        </h2>
+                    @endif
+                </div>
+                
+                <div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                            <i class="bi bi-box-arrow-right text-lg"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-4 sm:p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto">
+                <!-- Validation Errors via SweetAlert -->
+                @if($errors->any())
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            let errorHtml = '<ul class="text-left text-sm mt-2 text-red-600 list-disc list-inside">';
+                            @foreach($errors->all() as $error)
+                                errorHtml += '<li>{{ $error }}</li>';
+                            @endforeach
+                            errorHtml += '</ul>';
+                            
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Kesalahan Input!',
+                                html: errorHtml,
+                                confirmButtonColor: '#3b82f6',
+                                customClass: { popup: 'rounded-2xl' }
+                            });
+                        });
+                    </script>
+                @endif
+
+                {{ $slot }}
+            </main>
         </div>
     </div>
-</nav>
 
-<div id="main-content">
-    <div class="topbar d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-outline-secondary d-md-none" id="sidebarToggle">
-                <i class="bi bi-list"></i>
-            </button>
-            <nav aria-label="breadcrumb" class="mb-0">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item text-muted">Aplikasi</li>
-                    <li class="breadcrumb-item active fw-bold">@yield('title', 'Dashboard')</li>
-                </ol>
-            </nav>
-        </div>
-        
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </button>
-        </form>
-    </div>
-
-    <div class="page-content">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show">
-                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        {{ $slot ?? '' }}
-        @yield('content')
-        
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Script Sidebar untuk HP
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('sidebarToggle');
-
-    toggleBtn?.addEventListener('click', function (e) {
-        e.stopPropagation();
-        sidebar.classList.toggle('show');
-    });
-
-    document.addEventListener('click', function (e) {
-        if (!sidebar.contains(e.target) && window.innerWidth <= 768) {
-            sidebar.classList.remove('show');
+    <!-- SweetAlert2 Trigger for Success/Error sessions -->
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    toast: true,
+                    position: 'top-end',
+                    customClass: { popup: 'rounded-xl shadow-lg border border-slate-100' }
+                });
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    toast: true,
+                    position: 'top-end',
+                    customClass: { popup: 'rounded-xl shadow-lg border border-slate-100' }
+                });
+            });
+        </script>
+    @endif
+    
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.toggle('hidden');
         }
-    });
-</script>
-@stack('scripts')
+    </script>
+    @stack('scripts')
 </body>
 </html>

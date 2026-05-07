@@ -28,7 +28,10 @@ class LaporanController extends Controller
         $jenis      = Barang::distinct()->pluck('jenis');
         $totalNilai = $barangs->sum(fn($b) => $b->stok * $b->harga);
 
-        return view('laporan.stok', compact('barangs', 'jenis', 'totalNilai'));
+        $chartLabels = $barangs->pluck('nama_barang');
+        $chartData   = $barangs->pluck('stok');
+
+        return view('laporan.stok', compact('barangs', 'jenis', 'totalNilai', 'chartLabels', 'chartData'));
     }
 
     public function masuk(Request $request)

@@ -1,81 +1,60 @@
-@extends('layouts.app')
-@section('title', 'Ajukan Request Stok')
-@section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('request.index') }}">Request Stok</a></li>
-    <li class="breadcrumb-item active">Ajukan</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Buat Request Stok</x-slot>
+    <x-slot name="header">Ajukan Request Stok Barang</x-slot>
 
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="card">
-            <div class="card-header"><i class="bi bi-clipboard-plus me-2 text-primary"></i>Form Pengajuan Request Stok</div>
-            <div class="card-body">
-                <form method="POST" action="{{ route('request.store') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Pilih Barang <span class="text-danger">*</span></label>
-                        <select name="barang_id" class="form-select @error('barang_id') is-invalid @enderror" id="barangSelect">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                <i class="bi bi-clipboard-plus text-blue-500 text-xl"></i>
+                <h3 class="text-lg font-semibold text-slate-800">Form Request Stok</h3>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mx-6 mt-6 rounded-r-lg">
+                <div class="flex items-start">
+                    <i class="bi bi-info-circle text-blue-500 mt-0.5 mr-3"></i>
+                    <p class="text-sm text-blue-800">Request stok akan dikirimkan ke Admin. Stok baru akan masuk ke inventory Anda setelah Admin memproses pesanan ke Supplier secara fisik.</p>
+                </div>
+            </div>
+
+            <form action="{{ route('request.store') }}" method="POST" class="p-6">
+                @csrf
+                
+                <div class="space-y-5">
+                    <div>
+                        <label for="barang_id" class="block text-sm font-medium text-slate-700 mb-1">Pilih Barang yang Habis/Menipis</label>
+                        <select name="barang_id" id="barang_id" required
+                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                             <option value="">-- Pilih Barang --</option>
-                            @foreach($barangs as $barang)
-                                <option value="{{ $barang->id }}" data-stok="{{ $barang->stok }}"
-                                        data-status="{{ $barang->status_stok }}"
-                                        {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
-                                    {{ $barang->kode_barang }} - {{ $barang->nama_barang }} (Stok: {{ $barang->stok }})
+                            @foreach($barangs as $b)
+                                <option value="{{ $b->id }}" {{ old('barang_id') == $b->id ? 'selected' : '' }}>
+                                    {{ $b->kode_barang }} - {{ $b->nama_barang }} (Sisa Stok: {{ $b->stok }})
                                 </option>
                             @endforeach
                         </select>
-                        @error('barang_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div id="barangInfo" class="alert d-none py-2 mb-3">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Stok saat ini: <strong id="stokSaatIni">-</strong>
-                        | Status: <span id="statusStok" class="badge rounded-pill"></span>
+                    
+                    <div>
+                        <label for="jumlah" class="block text-sm font-medium text-slate-700 mb-1">Jumlah yang Direquest</label>
+                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required placeholder="Contoh: 50"
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Jumlah Diminta <span class="text-danger">*</span></label>
-                        <input type="number" name="jumlah" class="form-control @error('jumlah') is-invalid @enderror"
-                               value="{{ old('jumlah', 1) }}" min="1">
-                        @error('jumlah')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    
+                    <div>
+                        <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Alasan (Opsional)</label>
+                        <textarea name="keterangan" id="keterangan" rows="3" placeholder="Contoh: Ada pelanggan besar butuh banyak minggu depan..."
+                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">{{ old('keterangan') }}</textarea>
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Alasan / Catatan</label>
-                        <textarea name="catatan" class="form-control @error('catatan') is-invalid @enderror"
-                                  rows="3" placeholder="Jelaskan alasan request stok ini...">{{ old('catatan') }}</textarea>
-                        @error('catatan')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-send me-1"></i> Ajukan Request
-                        </button>
-                        <a href="{{ route('request.index') }}" class="btn btn-outline-secondary">Batal</a>
-                    </div>
-                </form>
-            </div>
+                </div>
+                
+                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                    <a href="{{ route('request.index') }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                        Batal
+                    </a>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-2">
+                        <i class="bi bi-send"></i> Kirim Request
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-@endsection
-
-@push('scripts')
-<script>
-const statusColors = { habis: 'danger', menipis: 'warning', tersedia: 'success' };
-document.getElementById('barangSelect').addEventListener('change', function () {
-    const opt    = this.options[this.selectedIndex];
-    const stok   = opt.dataset.stok;
-    const status = opt.dataset.status;
-    const info   = document.getElementById('barangInfo');
-    if (this.value !== '') {
-        document.getElementById('stokSaatIni').textContent = stok;
-        const el = document.getElementById('statusStok');
-        el.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        el.className = `badge rounded-pill bg-${statusColors[status] || 'secondary'}`;
-        info.className = `alert alert-${statusColors[status] === 'success' ? 'info' : statusColors[status]} py-2 mb-3`;
-        info.classList.remove('d-none');
-    } else {
-        info.classList.add('d-none');
-    }
-});
-</script>
-@endpush
+</x-app-layout>

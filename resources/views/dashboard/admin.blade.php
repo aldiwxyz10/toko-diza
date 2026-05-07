@@ -1,132 +1,114 @@
-@extends('layouts.app')
-@section('title', 'Dashboard Admin')
-@section('breadcrumb')
-    <li class="breadcrumb-item active">Dashboard</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Dashboard Admin</x-slot>
+    <x-slot name="header">Dashboard Admin</x-slot>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h4 class="mb-0 fw-bold">Dashboard Admin</h4>
-        <small class="text-muted">Selamat datang, {{ auth()->user()->name }}</small>
-    </div>
-    <span class="badge bg-primary">{{ now()->isoFormat('dddd, D MMMM Y') }}</span>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <!-- Card: Total Barang -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Total Barang</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($totalBarang) }}</h3>
+            </div>
+        </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-sm-6 col-xl-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1" style="font-size:.8rem;">Total Barang</p>
-                        <h3 class="fw-bold mb-0">{{ $totalBarang }}</h3>
-                        <small class="text-muted">jenis produk</small>
-                    </div>
-                    <div class="p-2 bg-primary bg-opacity-10 rounded-3">
-                        <i class="bi bi-box-seam text-primary fs-4"></i>
-                    </div>
-                </div>
+        <!-- Card: Total Stok -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="bi bi-boxes"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Total Stok Keseluruhan</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($totalStok) }}</h3>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1" style="font-size:.8rem;">Total Stok</p>
-                        <h3 class="fw-bold mb-0">{{ number_format($totalStok) }}</h3>
-                        <small class="text-success">+{{ number_format($masukBulanIni) }} masuk bulan ini</small>
-                    </div>
-                    <div class="p-2 bg-success bg-opacity-10 rounded-3">
-                        <i class="bi bi-stack text-success fs-4"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1" style="font-size:.8rem;">Stok Kritis</p>
-                        <h3 class="fw-bold mb-0 text-danger">{{ $barangHabis + $barangMenipis }}</h3>
-                        <small class="text-muted">{{ $barangHabis }} habis · {{ $barangMenipis }} menipis</small>
-                    </div>
-                    <div class="p-2 bg-danger bg-opacity-10 rounded-3">
-                        <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <p class="text-muted mb-1" style="font-size:.8rem;">Request Pending</p>
-                        <h3 class="fw-bold mb-0 text-warning">{{ $requestPending }}</h3>
-                        <small class="text-muted">menunggu persetujuan</small>
-                    </div>
-                    <div class="p-2 bg-warning bg-opacity-10 rounded-3">
-                        <i class="bi bi-clipboard-check text-warning fs-4"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row g-3">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <span><i class="bi bi-exclamation-circle text-danger me-2"></i>Barang Stok Kritis</span>
-                <a href="{{ route('laporan.stok') }}" class="btn btn-sm btn-outline-danger">Lihat Semua</a>
+        <!-- Card: Barang Habis -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="bi bi-exclamation-triangle"></i>
             </div>
-            <div class="card-body p-0">
-                @forelse($barangKritis as $barang)
-                <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
-                    <div>
-                        <div class="fw-semibold" style="font-size:.875rem;">{{ $barang->nama_barang }}</div>
-                        <small class="text-muted">{{ $barang->kode_barang }}</small>
-                    </div>
-                    <span class="badge bg-{{ $barang->status_badge }} rounded-pill px-3">Stok: {{ $barang->stok }}</span>
-                </div>
-                @empty
-                <div class="text-center text-muted py-4">
-                    <i class="bi bi-check-circle fs-3"></i><p class="mb-0 mt-2">Semua stok aman</p>
-                </div>
-                @endforelse
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Stok Habis</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($barangHabis) }}</h3>
             </div>
         </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <span><i class="bi bi-clock-history text-primary me-2"></i>Request Terbaru</span>
-                <a href="{{ route('request.index') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
-            </div>
-            <div class="card-body p-0">
-                @forelse($requestTerbaru as $req)
-                <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
-                    <div>
-                        <div class="fw-semibold" style="font-size:.875rem;">{{ $req->barang->nama_barang }}</div>
-                        <small class="text-muted"><i class="bi bi-person"></i> {{ $req->user->name }} · {{ $req->jumlah }} pcs</small>
-                    </div>
-                    <span class="badge bg-{{ $req->status_badge }} rounded-pill px-3">{{ ucfirst($req->status) }}</span>
-                </div>
-                @empty
-                <div class="text-center text-muted py-4">
-                    <i class="bi bi-inbox fs-3"></i><p class="mb-0 mt-2">Belum ada request</p>
-                </div>
-                @endforelse
-            </div>
-        </div>
-    </div>
-</div>
 
-@endsection
+        <!-- Card: Request Pending -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="bi bi-clipboard-check"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Request Pending</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($requestPending) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Transaksi Bulan Ini -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                <i class="bi bi-calendar-check text-blue-500"></i>
+                <h4 class="font-semibold text-slate-800">Transaksi Bulan Ini</h4>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-50">
+                    <div>
+                        <p class="text-sm text-slate-500 mb-1">Barang Masuk</p>
+                        <h4 class="text-xl font-bold text-green-600">{{ number_format($masukBulanIni) }} <span class="text-sm font-normal text-slate-400">Unit</span></h4>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500">
+                        <i class="bi bi-arrow-down-left text-lg"></i>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 mb-1">Barang Keluar</p>
+                        <h4 class="text-xl font-bold text-blue-600">{{ number_format($keluarBulanIni) }} <span class="text-sm font-normal text-slate-400">Unit</span></h4>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                        <i class="bi bi-arrow-up-right text-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stok Kritis -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                <i class="bi bi-exclamation-circle text-red-500"></i>
+                <h4 class="font-semibold text-slate-800">Stok Kritis (≤ 5)</h4>
+            </div>
+            <div class="p-0 overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-slate-50 text-slate-500">
+                        <tr>
+                            <th class="px-6 py-3 font-medium">Barang</th>
+                            <th class="px-6 py-3 font-medium">Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @forelse($barangKritis as $barang)
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-3 text-slate-800">{{ $barang->nama_barang }}</td>
+                                <td class="px-6 py-3">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                        {{ $barang->stok }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="px-6 py-4 text-center text-slate-500">Tidak ada stok kritis.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

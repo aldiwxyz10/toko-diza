@@ -1,57 +1,64 @@
-@extends('layouts.app')
-@section('title', 'Tambah User')
-@section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('user.index') }}">Manajemen User</a></li>
-    <li class="breadcrumb-item active">Tambah User</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Tambah User</x-slot>
+    <x-slot name="header">Tambah Pengguna Baru</x-slot>
 
-<div class="row justify-content-center">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header"><i class="bi bi-person-plus me-2 text-primary"></i>Tambah User Baru</div>
-            <div class="card-body">
-                <form method="POST" action="{{ route('user.store') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name') }}">
-                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                               value="{{ old('email') }}">
-                        @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Role <span class="text-danger">*</span></label>
-                        <select name="role" class="form-select @error('role') is-invalid @enderror">
-                            <option value="user"  {{ old('role') == 'user'  ? 'selected' : '' }}>User (Karyawan)</option>
-                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin (Owner)</option>
-                        </select>
-                        @error('role')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
-                        @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Konfirmasi Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password_confirmation" class="form-control">
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-1"></i> Simpan
-                        </button>
-                        <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">Batal</a>
-                    </div>
-                </form>
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                <i class="bi bi-person-plus text-blue-500 text-xl"></i>
+                <h3 class="text-lg font-semibold text-slate-800">Form Tambah User</h3>
             </div>
+            
+            <form action="{{ route('user.store') }}" method="POST" class="p-6">
+                @csrf
+                
+                <div class="space-y-5">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('name') border-red-500 @enderror">
+                        @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                        <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('email') border-red-500 @enderror">
+                        @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-slate-700 mb-1">Hak Akses (Role)</label>
+                        <select name="role" id="role" required
+                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                            <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User / Karyawan</option>
+                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrator</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <input type="password" name="password" id="password" required minlength="8"
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('password') border-red-500 @enderror">
+                        @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-slate-700 mb-1">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" required minlength="8"
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                    <a href="{{ route('user.index') }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                        Batal
+                    </a>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                        Simpan User
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-@endsection
+</x-app-layout>

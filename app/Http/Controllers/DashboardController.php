@@ -10,14 +10,7 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        return auth()->user()->isAdmin()
-            ? $this->adminDashboard()
-            : $this->userDashboard();
-    }
-
-    private function adminDashboard()
+    public function admin()
     {
         $totalBarang    = Barang::count();
         $totalStok      = Barang::sum('stok');
@@ -41,7 +34,7 @@ class DashboardController extends Controller
         ));
     }
 
-    private function userDashboard()
+    public function user()
     {
         $barangHabis   = Barang::where('stok', 0)->count();
         $barangMenipis = Barang::where('stok', '>', 0)->where('stok', '<=', 5)->count();

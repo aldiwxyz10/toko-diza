@@ -1,73 +1,67 @@
-@extends('layouts.app')
-@section('title', 'Barang Masuk')
-@section('breadcrumb')
-    <li class="breadcrumb-item active">Barang Masuk</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Barang Masuk</x-slot>
+    <x-slot name="header">Data Barang Masuk</x-slot>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="fw-bold mb-0"><i class="bi bi-box-arrow-in-down me-2 text-success"></i>Barang Masuk</h4>
-    <a href="{{ route('barang-masuk.create') }}" class="btn btn-success">
-        <i class="bi bi-plus-circle me-1"></i> Tambah
-    </a>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <form method="GET" class="row g-2 mb-3">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control form-control-sm"
-                       placeholder="Cari barang..." value="{{ request('search') }}">
-            </div>
-            <div class="col-md-3">
-                <input type="date" name="tanggal_dari" class="form-control form-control-sm" value="{{ request('tanggal_dari') }}">
-            </div>
-            <div class="col-md-3">
-                <input type="date" name="tanggal_sampai" class="form-control form-control-sm" value="{{ request('tanggal_sampai') }}">
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-search"></i> Filter</button>
-                <a href="{{ route('barang-masuk.index') }}" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
-            </div>
-        </form>
-
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h3 class="text-lg font-semibold text-slate-800">Riwayat Barang Masuk</h3>
+            <a href="{{ route('barang-masuk.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-lg font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors text-sm">
+                <i class="bi bi-plus-lg mr-2"></i> Tambah Transaksi Masuk
+            </a>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
                     <tr>
-                        <th>#</th><th>Tanggal</th><th>Kode</th><th>Nama Barang</th>
-                        <th class="text-center">Jumlah Masuk</th><th>Keterangan</th><th class="text-center">Aksi</th>
+                        <th class="px-6 py-4 font-semibold">Tanggal</th>
+                        <th class="px-6 py-4 font-semibold">Nama Barang</th>
+                        <th class="px-6 py-4 font-semibold">Jumlah</th>
+                        <th class="px-6 py-4 font-semibold">Keterangan</th>
+                        <th class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @forelse($barangMasuks as $item)
-                    <tr>
-                        <td class="text-muted">{{ $barangMasuks->firstItem() + $loop->index }}</td>
-                        <td>{{ $item->tanggal->format('d/m/Y') }}</td>
-                        <td><span class="badge bg-light text-dark">{{ $item->barang->kode_barang }}</span></td>
-                        <td class="fw-semibold">{{ $item->barang->nama_barang }}</td>
-                        <td class="text-center"><span class="badge bg-success rounded-pill px-3">+{{ $item->jumlah }}</span></td>
-                        <td class="text-muted">{{ $item->keterangan ?? '-' }}</td>
-                        <td class="text-center">
-                            <form method="POST" action="{{ route('barang-masuk.destroy', $item) }}"
-                                  onsubmit="return confirm('Hapus data? Stok akan dikurangi kembali.')">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-slate-600">{{ $item->tanggal->format('d M Y') }}</td>
+                            <td class="px-6 py-4">
+                                <span class="font-medium text-slate-800">{{ $item->barang->nama_barang }}</span>
+                                <div class="text-xs text-slate-500">{{ $item->barang->kode_barang }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded font-medium bg-green-100 text-green-800">
+                                    + {{ $item->jumlah }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">{{ $item->keterangan ?? '-' }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <form action="{{ route('barang-masuk.destroy', $item) }}" method="POST" class="inline-block" onsubmit="return confirm('Menghapus riwayat masuk akan MENGURANGI stok barang. Lanjutkan?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-lg transition-colors" title="Hapus Data">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
-                            <i class="bi bi-inbox fs-3"></i><p class="mb-0 mt-2">Belum ada data</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="bi bi-box-arrow-in-down text-4xl text-slate-300 mb-3"></i>
+                                    <p class="text-lg">Belum ada transaksi barang masuk.</p>
+                                </div>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        {{ $barangMasuks->links() }}
+        @if($barangMasuks->hasPages())
+        <div class="px-6 py-4 border-t border-slate-100">
+            {{ $barangMasuks->links() }}
+        </div>
+        @endif
     </div>
-</div>
-
-@endsection
+</x-app-layout>

@@ -75,7 +75,7 @@ class RequestStockController extends Controller
     public function updateStatus(Request $request, RequestStock $requestStock)
     {
         $validated = $request->validate([
-            'status' => 'required|in:disetujui,ditolak',
+            'status' => 'required|in:approved,rejected',
         ]);
 
         $requestStock->update($validated);

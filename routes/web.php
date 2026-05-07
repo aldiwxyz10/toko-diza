@@ -9,16 +9,20 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => redirect()->route('dashboard'));
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->isAdmin() ? redirect()->route('dashboard.admin') : redirect()->route('dashboard.user');
+    }
+    return redirect()->route('login');
+});
 
 require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     // ── ADMIN ONLY ──────────────────────────────────────────────────────
     Route::middleware(['role:admin'])->group(function () {
+        Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
 
         Route::resource('barang', BarangController::class)->except(['index', 'show']);
         Route::resource('barang-masuk', BarangMasukController::class)->except(['edit', 'update']);
@@ -37,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
 
     // ── USER ONLY ────────────────────────────────────────────────────────
     Route::middleware(['role:user'])->group(function () {
+        Route::get('/dashboard/user', [DashboardController::class, 'user'])->name('dashboard.user');
+        
         Route::get('/request/create', [RequestStockController::class, 'create'])->name('request.create');
         Route::post('/request',        [RequestStockController::class, 'store'])->name('request.store');
         Route::delete('/request/{request}', [RequestStockController::class, 'destroy'])->name('request.destroy');

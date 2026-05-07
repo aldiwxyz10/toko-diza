@@ -1,95 +1,88 @@
-@extends('layouts.app')
-@section('title', 'Data Barang')
-@section('breadcrumb')
-    <li class="breadcrumb-item active">Data Barang</li>
-@endsection
-@section('content')
+<x-app-layout>
+    <x-slot name="title">Data Barang</x-slot>
+    <x-slot name="header">Data Barang</x-slot>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="fw-bold mb-0"><i class="bi bi-box-seam me-2 text-primary"></i>Data Barang</h4>
-    @if(auth()->user()->isAdmin())
-    <a href="{{ route('barang.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Tambah Barang
-    </a>
-    @endif
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <form method="GET" class="row g-2 mb-3">
-            <div class="col-md-5">
-                <input type="text" name="search" class="form-control form-control-sm"
-                       placeholder="Cari nama/kode barang..." value="{{ request('search') }}">
-            </div>
-            <div class="col-md-3">
-                <select name="jenis" class="form-select form-select-sm">
-                    <option value="">-- Semua Jenis --</option>
-                    @foreach($jenis as $j)
-                        <option value="{{ $j }}" {{ request('jenis') == $j ? 'selected' : '' }}>{{ $j }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-search"></i> Cari
-                </button>
-                <a href="{{ route('barang.index') }}" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
-            </div>
-        </form>
-
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h3 class="text-lg font-semibold text-slate-800">Daftar Inventory</h3>
+            @if(auth()->user()->isAdmin())
+                <a href="{{ route('barang.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors text-sm">
+                    <i class="bi bi-plus-lg mr-2"></i> Tambah Barang
+                </a>
+            @endif
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
                     <tr>
-                        <th>#</th><th>Kode</th><th>Nama Barang</th><th>Jenis</th>
-                        <th class="text-center">Stok</th><th class="text-center">Status</th>
-                        <th class="text-end">Harga</th><th class="text-center">Aksi</th>
+                        <th class="px-6 py-4 font-semibold">Kode</th>
+                        <th class="px-6 py-4 font-semibold">Nama Barang</th>
+                        <th class="px-6 py-4 font-semibold">Jenis</th>
+                        <th class="px-6 py-4 font-semibold">Stok</th>
+                        <th class="px-6 py-4 font-semibold">Harga (Rp)</th>
+                        @if(auth()->user()->isAdmin())
+                        <th class="px-6 py-4 font-semibold text-right">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @forelse($barangs as $barang)
-                    <tr>
-                        <td class="text-muted">{{ $barangs->firstItem() + $loop->index }}</td>
-                        <td><span class="badge bg-light text-dark">{{ $barang->kode_barang }}</span></td>
-                        <td class="fw-semibold">{{ $barang->nama_barang }}</td>
-                        <td>{{ $barang->jenis }}</td>
-                        <td class="text-center fw-bold">{{ number_format($barang->stok) }}</td>
-                        <td class="text-center">
-                            <span class="badge rounded-pill bg-{{ $barang->status_badge }}">
-                                {{ ucfirst($barang->status_stok) }}
-                            </span>
-                        </td>
-                        <td class="text-end">Rp {{ number_format($barang->harga, 0, ',', '.') }}</td>
-                        <td class="text-center">
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ route('barang.show', $barang) }}" class="btn btn-outline-info">
-                                    <i class="bi bi-eye"></i>
+                        <tr class="hover:bg-slate-50 transition-colors {{ $barang->stok == 0 ? 'bg-red-50' : '' }}">
+                            <td class="px-6 py-4">
+                                <span class="font-mono text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">{{ $barang->kode_barang }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('barang.show', $barang) }}" class="font-medium text-slate-800 hover:text-blue-600 transition-colors">
+                                    {{ $barang->nama_barang }}
                                 </a>
-                                @if(auth()->user()->isAdmin())
-                                <a href="{{ route('barang.edit', $barang) }}" class="btn btn-outline-warning">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <form method="POST" action="{{ route('barang.destroy', $barang) }}"
-                                      onsubmit="return confirm('Hapus barang ini?')">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                </form>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">{{ $barang->jenis }}</td>
+                            <td class="px-6 py-4">
+                                @if($barang->stok > 10)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        {{ $barang->stok }}
+                                    </span>
+                                @elseif($barang->stok > 0)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        {{ $barang->stok }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        Habis (0)
+                                    </span>
                                 @endif
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">Rp {{ number_format($barang->harga, 0, ',', '.') }}</td>
+                            @if(auth()->user()->isAdmin())
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('barang.edit', $barang) }}" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{{ route('barang.destroy', $barang) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            @endif
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center text-muted py-4">
-                            <i class="bi bi-inbox fs-3"></i><p class="mb-0 mt-2">Tidak ada data barang</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="{{ auth()->user()->isAdmin() ? '6' : '5' }}" class="px-6 py-12 text-center text-slate-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="bi bi-box-seam text-4xl text-slate-300 mb-3"></i>
+                                    <p class="text-lg">Belum ada data barang.</p>
+                                </div>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        {{ $barangs->links() }}
     </div>
-</div>
-
-@endsection
+</x-app-layout>

@@ -28,10 +28,10 @@ class RequestStock extends Model
     public function getStatusBadgeAttribute(): string
     {
         return match ($this->status) {
-            'pending'   => 'warning',
-            'disetujui' => 'success',
-            'ditolak'   => 'danger',
-            default     => 'secondary',
+            'pending'  => 'warning',
+            'approved' => 'success',
+            'rejected' => 'danger',
+            default    => 'secondary',
         };
     }
 }
