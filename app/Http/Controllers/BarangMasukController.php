@@ -59,6 +59,37 @@ class BarangMasukController extends Controller
         return view('barang-masuk.show', compact('barangMasuk'));
     }
 
+    public function edit(BarangMasuk $barangMasuk)
+    {
+        $barangs = Barang::orderBy('nama_barang')->get();
+        return view('barang-masuk.edit', compact('barangMasuk', 'barangs'));
+    }
+
+    public function update(Request $request, BarangMasuk $barangMasuk)
+    {
+        $validated = $request->validate([
+            'barang_id'  => 'required|exists:barangs,id',
+            'jumlah'     => 'required|integer|min:1',
+            'tanggal'    => 'required|date',
+            'keterangan' => 'nullable|string|max:255',
+        ]);
+
+        DB::transaction(function () use ($validated, $barangMasuk) {
+            if ($barangMasuk->barang_id == $validated['barang_id']) {
+                $selisih = $validated['jumlah'] - $barangMasuk->jumlah;
+                $barangMasuk->barang->increment('stok', $selisih);
+            } else {
+                $barangMasuk->barang->decrement('stok', $barangMasuk->jumlah);
+                $newBarang = Barang::find($validated['barang_id']);
+                $newBarang->increment('stok', $validated['jumlah']);
+            }
+            
+            $barangMasuk->update($validated);
+        });
+
+        return redirect()->route('laporan.masuk')->with('success', 'Data barang masuk berhasil diperbarui.');
+    }
+
     public function destroy(BarangMasuk $barangMasuk)
     {
         DB::transaction(function () use ($barangMasuk) {
@@ -66,7 +97,6 @@ class BarangMasukController extends Controller
             $barangMasuk->delete();
         });
 
-        return redirect()->route('barang-masuk.index')
-                         ->with('success', 'Data dihapus, stok dikurangi kembali.');
+        return back()->with('success', 'Data dihapus, stok dikurangi kembali.');
     }
 }

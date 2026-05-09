@@ -16,9 +16,6 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
                     <i class="bi bi-filter mr-1"></i> Filter
                 </button>
-                <a href="{{ route('laporan.masuk') }}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm">
-                    <i class="bi bi-arrow-clockwise"></i> Reset
-                </a>
             </div>
             <div class="ml-auto">
                 <button type="button" onclick="window.print()" class="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors font-medium text-sm">
@@ -38,6 +35,7 @@
                         <th class="px-6 py-4 font-semibold">Nama Barang</th>
                         <th class="px-6 py-4 font-semibold">Jumlah Masuk</th>
                         <th class="px-6 py-4 font-semibold">Keterangan</th>
+                        <th class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -52,10 +50,24 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-slate-600">{{ $item->keterangan ?? '-' }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('barang-masuk.edit', $item) }}" class="text-blue-500 hover:text-blue-700 p-1 hover:bg-blue-50 rounded transition-colors" title="Edit">
+                                        <i class="bi bi-pencil-square text-lg"></i>
+                                    </a>
+                                    <form action="{{ route('barang-masuk.destroy', $item) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus riwayat masuk ini? Stok utama barang juga akan dikurangi otomatis.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-slate-500 hover:text-red-600 p-1 hover:bg-slate-100 rounded transition-colors" title="Hapus">
+                                            <i class="bi bi-trash3 text-lg"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-slate-500">Tidak ada data transaksi masuk pada periode ini.</td>
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-500">Tidak ada data transaksi masuk pada periode ini.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
 
         Route::resource('barang', BarangController::class)->except(['index', 'show']);
-        Route::resource('barang-masuk', BarangMasukController::class)->except(['edit', 'update']);
+        Route::resource('barang-masuk', BarangMasukController::class);
         Route::resource('barang-keluar', BarangKeluarController::class)->except(['edit', 'update']);
         Route::resource('user', UserController::class)->except(['show']);
 
