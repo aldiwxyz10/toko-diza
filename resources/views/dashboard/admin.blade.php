@@ -6,7 +6,7 @@
         <!-- Card: Total Barang -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
-                <i class="bi bi-box-seam"></i>
+                <i class="bi bi-box"></i>
             </div>
             <div>
                 <p class="text-sm font-medium text-slate-500 mb-1">Total Barang</p>
