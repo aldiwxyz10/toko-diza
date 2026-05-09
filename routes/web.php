@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\KasirController;
 use App\Http\Controllers\RequestStockController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
@@ -46,6 +47,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/request/create', [RequestStockController::class, 'create'])->name('request.create');
         Route::post('/request',        [RequestStockController::class, 'store'])->name('request.store');
         Route::delete('/request/{request}', [RequestStockController::class, 'destroy'])->name('request.destroy');
+
+        // Kasir POS
+        Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
+        Route::post('/kasir', [KasirController::class, 'store'])->name('kasir.store');
+        Route::get('/kasir/struk/{id}', [KasirController::class, 'struk'])->name('kasir.struk');
     });
 
     // ── ADMIN & USER ─────────────────────────────────────────────────────

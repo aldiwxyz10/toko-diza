@@ -18,7 +18,7 @@
             </div>
             <div>
                 <p class="text-sm font-medium text-slate-500 mb-1">Request Menunggu</p>
-                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($requestPending) }}</h3>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($myPending) }}</h3>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    @forelse($requestTerbaru as $req)
+                    @forelse($myRequests as $req)
                         <tr class="hover:bg-slate-50">
                             <td class="px-6 py-3 text-slate-800">{{ $req->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-3 font-medium text-slate-800">{{ $req->barang->nama_barang }}</td>

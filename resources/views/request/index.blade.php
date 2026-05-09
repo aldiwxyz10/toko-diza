@@ -41,8 +41,8 @@
                             <td class="px-6 py-4">
                                 @php
                                     $color = match($req->status) {
-                                        'approved' => 'green',
-                                        'rejected' => 'red',
+                                        'disetujui' => 'green',
+                                        'ditolak' => 'red',
                                         default => 'yellow'
                                     };
                                 @endphp
@@ -56,7 +56,7 @@
                                         <form action="{{ route('request.updateStatus', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Setujui request ini?');">
                                             @csrf
                                             @method('PATCH')
-                                            <input type="hidden" name="status" value="approved">
+                                            <input type="hidden" name="status" value="disetujui">
                                             <button type="submit" class="text-white bg-green-500 hover:bg-green-600 px-2 py-1 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-check-lg"></i> Setujui
                                             </button>
@@ -64,7 +64,7 @@
                                         <form action="{{ route('request.updateStatus', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Tolak request ini?');">
                                             @csrf
                                             @method('PATCH')
-                                            <input type="hidden" name="status" value="rejected">
+                                            <input type="hidden" name="status" value="ditolak">
                                             <button type="submit" class="text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-x-lg"></i> Tolak
                                             </button>

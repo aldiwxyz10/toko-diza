@@ -75,10 +75,23 @@ class RequestStockController extends Controller
     public function updateStatus(Request $request, RequestStock $requestStock)
     {
         $validated = $request->validate([
-            'status' => 'required|in:approved,rejected',
+            'status' => 'required|in:disetujui,ditolak',
         ]);
 
-        $requestStock->update($validated);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($requestStock, $validated) {
+            $requestStock->update($validated);
+
+            if ($validated['status'] === 'disetujui') {
+                $requestStock->barang->increment('stok', $requestStock->jumlah);
+
+                \App\Models\BarangMasuk::create([
+                    'barang_id' => $requestStock->barang_id,
+                    'jumlah' => $requestStock->jumlah,
+                    'tanggal' => now(),
+                    'keterangan' => 'Dari Permintaan Stok (Request ID: ' . $requestStock->id . ')',
+                ]);
+            }
+        });
 
         return back()->with('success', "Request berhasil {$validated['status']}.");
     }

@@ -62,6 +62,10 @@
                 <x-nav-link href="{{ route('barang-keluar.index') }}" :active="request()->routeIs('barang-keluar.*')">
                     <i class="bi bi-box-arrow-up text-lg"></i> Barang Keluar
                 </x-nav-link>
+                @else
+                <x-nav-link href="{{ route('kasir.index') }}" :active="request()->routeIs('kasir.*')">
+                    <i class="bi bi-calculator text-lg"></i> Kasir (POS)
+                </x-nav-link>
                 @endif
                 
                 <x-nav-link href="{{ route('request.index') }}" :active="request()->routeIs('request.*')">

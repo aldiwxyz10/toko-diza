@@ -43,7 +43,16 @@ class BarangController extends Controller
             'harga'       => 'required|numeric|min:0',
         ]);
 
-        Barang::create($validated);
+        $barang = Barang::create($validated);
+
+        if ($barang->stok > 0) {
+            \App\Models\BarangMasuk::create([
+                'barang_id' => $barang->id,
+                'jumlah' => $barang->stok,
+                'tanggal' => now(),
+                'keterangan' => 'Stok Awal (Master Data)',
+            ]);
+        }
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
     }
@@ -73,7 +82,25 @@ class BarangController extends Controller
             'harga'       => 'required|numeric|min:0',
         ]);
 
+        $selisih = $validated['stok'] - $barang->stok;
+        
         $barang->update($validated);
+
+        if ($selisih > 0) {
+            \App\Models\BarangMasuk::create([
+                'barang_id' => $barang->id,
+                'jumlah' => $selisih,
+                'tanggal' => now(),
+                'keterangan' => 'Penyesuaian Stok (Edit Master)',
+            ]);
+        } elseif ($selisih < 0) {
+            \App\Models\BarangKeluar::create([
+                'barang_id' => $barang->id,
+                'jumlah' => abs($selisih),
+                'tanggal' => now(),
+                'keterangan' => 'Penyesuaian Stok (Edit Master)',
+            ]);
+        }
 
         return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui.');
     }
