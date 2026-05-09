@@ -42,11 +42,11 @@
                 
                 @if(auth()->user()->isAdmin())
                     <x-nav-link href="{{ route('dashboard.admin') }}" :active="request()->routeIs('dashboard.admin')">
-                        <i class="bi bi-speedometer2 text-lg"></i> Dashboard
+                        <i class="bi bi-speedometer2 text-lg"></i> Beranda
                     </x-nav-link>
                 @else
                     <x-nav-link href="{{ route('dashboard.user') }}" :active="request()->routeIs('dashboard.user')">
-                        <i class="bi bi-speedometer2 text-lg"></i> Dashboard
+                        <i class="bi bi-speedometer2 text-lg"></i> Beranda
                     </x-nav-link>
                 @endif
                 
@@ -65,7 +65,7 @@
                 @endif
                 
                 <x-nav-link href="{{ route('request.index') }}" :active="request()->routeIs('request.*')">
-                    <i class="bi bi-clipboard-check text-lg"></i> Request Stock
+                    <i class="bi bi-clipboard-check text-lg"></i> Permintaan Stok
                     @if(auth()->user()->isAdmin())
                         @php $pending = \App\Models\RequestStock::where('status','pending')->count() @endphp
                         @if($pending > 0)
@@ -88,7 +88,7 @@
                 
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sistem</p>
                 <x-nav-link href="{{ route('user.index') }}" :active="request()->routeIs('user.*')">
-                    <i class="bi bi-people text-lg"></i> Manajemen User
+                    <i class="bi bi-people text-lg"></i> Manajemen Pengguna
                 </x-nav-link>
                 @endif
             </div>
@@ -132,7 +132,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
-                            <i class="bi bi-box-arrow-right text-lg"></i> Logout
+                            <i class="bi bi-box-arrow-right text-lg"></i> Keluar
                         </button>
                     </form>
                 </div>

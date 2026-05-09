@@ -1,12 +1,11 @@
 <x-app-layout>
-    <x-slot name="title">Edit User</x-slot>
-    <x-slot name="header">Edit Pengguna: {{ $user->name }}</x-slot>
+    <x-slot name="title">Ubah Pengguna</x-slot>
+    <x-slot name="header">Ubah Pengguna: {{ $user->name }}</x-slot>
 
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
-                <i class="bi bi-pencil-square text-blue-500 text-xl"></i>
-                <h3 class="text-lg font-semibold text-slate-800">Form Edit User</h3>
+                <h3 class="text-lg font-semibold text-slate-800">Formulir Ubah Pengguna</h3>
             </div>
             
             <form action="{{ route('user.update', $user) }}" method="POST" class="p-6">
@@ -29,11 +28,11 @@
                     </div>
                     
                     <div>
-                        <label for="role" class="block text-sm font-medium text-slate-700 mb-1">Hak Akses (Role)</label>
+                        <label for="role" class="block text-sm font-medium text-slate-700 mb-1">Hak Akses (Peran)</label>
                         <select name="role" id="role" required
                                 class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
                                 {{ $user->id === auth()->id() ? 'disabled' : '' }}>
-                            <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User / Karyawan</option>
+                            <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>Pengguna / Karyawan</option>
                             <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Administrator</option>
                         </select>
                         @if($user->id === auth()->id())
@@ -43,18 +42,18 @@
                     </div>
                     
                     <div class="pt-4 border-t border-slate-100">
-                        <p class="text-sm font-medium text-slate-700 mb-3">Ubah Password <span class="text-xs text-slate-400 font-normal">(Opsional - Kosongkan jika tidak ingin mengubah)</span></p>
+                        <p class="text-sm font-medium text-slate-700 mb-3">Ubah Kata Sandi <span class="text-xs text-slate-400 font-normal">(Opsional - Kosongkan jika tidak ingin mengubah)</span></p>
                         
                         <div class="space-y-4">
                             <div>
-                                <label for="password" class="block text-xs font-medium text-slate-600 mb-1">Password Baru</label>
+                                <label for="password" class="block text-xs font-medium text-slate-600 mb-1">Kata Sandi Baru</label>
                                 <input type="password" name="password" id="password" minlength="8"
                                        class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('password') border-red-500 @enderror">
                                 @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                             </div>
                             
                             <div>
-                                <label for="password_confirmation" class="block text-xs font-medium text-slate-600 mb-1">Konfirmasi Password Baru</label>
+                                <label for="password_confirmation" class="block text-xs font-medium text-slate-600 mb-1">Konfirmasi Kata Sandi Baru</label>
                                 <input type="password" name="password_confirmation" id="password_confirmation" minlength="8"
                                        class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                             </div>
