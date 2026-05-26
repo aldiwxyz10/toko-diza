@@ -13,7 +13,14 @@
                 @foreach($barangs as $barang)
                     <div class="flex flex-col items-center p-4 border border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-sm transition-all text-center bg-white h-full relative" id="card-{{ $barang->id }}">
                         <i class="bi bi-box-seam text-3xl text-slate-400 mb-2"></i>
-                        <span class="font-medium text-slate-700 text-sm line-clamp-2 leading-tight mb-1">{{ $barang->nama_barang }}</span>
+                        <span class="font-medium text-slate-700 text-sm line-clamp-2 leading-tight mb-0.5">{{ $barang->nama_barang }}</span>
+                        @if($barang->deskripsi)
+                            <span class="text-[10px] text-slate-400 line-clamp-1 mb-1 max-w-full px-1" title="{{ $barang->deskripsi }}">
+                                {{ $barang->deskripsi }}
+                            </span>
+                        @else
+                            <span class="text-[10px] text-slate-300 italic mb-1">Tanpa spesifikasi</span>
+                        @endif
                         <span class="text-xs text-slate-500 mb-1">Stok: {{ $barang->stok }}</span>
                         <span class="font-semibold text-blue-600 mb-3">Rp {{ number_format($barang->harga, 0, ',', '.') }}</span>
                         

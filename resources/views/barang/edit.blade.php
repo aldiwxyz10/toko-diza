@@ -30,8 +30,20 @@
                     
                     <div>
                         <label for="jenis" class="block text-sm font-medium text-slate-700 mb-1">Jenis / Kategori</label>
-                        <input type="text" name="jenis" id="jenis" value="{{ old('jenis', $barang->jenis) }}" required
-                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                        <select name="jenis" id="jenis" required
+                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('jenis') border-red-500 @enderror">
+                            @foreach([
+                                'Plastik',
+                                'Bahan Kue & Makanan',
+                                'Wadah Makanan',
+                                'Peralatan Makan',
+                                'Tali & Packing',
+                                'Kebutuhan Harian'
+                            ] as $cat)
+                                <option value="{{ $cat }}" {{ old('jenis', $barang->jenis) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            @endforeach
+                        </select>
+                        @error('jenis') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -47,6 +59,14 @@
                             <input type="number" name="harga" id="harga" value="{{ old('harga', $barang->harga) }}" min="0" required
                                    class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                         </div>
+                    </div>
+
+                    <div>
+                        <label for="deskripsi" class="block text-sm font-medium text-slate-700 mb-1">Deskripsi / Spesifikasi (Opsional)</label>
+                        <textarea name="deskripsi" id="deskripsi" rows="3"
+                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors text-slate-600 placeholder-slate-400 text-sm"
+                                  placeholder="Contoh: Ukuran 10x15 cm, ketebalan 0.5mm, isi 100 pcs per pak, merk Bawang...">{{ old('deskripsi', $barang->deskripsi) }}</textarea>
+                        @error('deskripsi') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 
