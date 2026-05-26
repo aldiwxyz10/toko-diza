@@ -7,7 +7,17 @@
         
         <!-- KIRI: Daftar Barang -->
         <div class="w-full lg:w-2/3 bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-            <h3 class="text-lg font-semibold text-slate-800 mb-4">Pilih Barang</h3>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4">
+                <h2 class="text-xl font-semibold text-slate-800 whitespace-nowrap flex-shrink-0">Pilih Barang</h2>
+                <!-- Search Product Input -->
+                <div class="flex items-center border pl-3 gap-2 bg-white border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 h-[38px] rounded-lg overflow-hidden w-full sm:flex-grow sm:max-w-[590px] transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 30 30" fill="#94A3B8">
+                        <path d="M13 3C7.489 3 3 7.489 3 13s4.489 10 10 10a9.95 9.95 0 0 0 6.322-2.264l5.971 5.971a1 1 0 1 0 1.414-1.414l-5.97-5.97A9.95 9.95 0 0 0 23 13c0-5.511-4.489-10-10-10m0 2c4.43 0 8 3.57 8 8s-3.57 8-8 8-8-3.57-8-8 3.57-8 8-8"/>
+                    </svg>
+                    <input type="text" id="search-kasir" placeholder="Cari nama atau deskripsi..." 
+                           class="w-full h-full bg-transparent border-0 p-0 focus:ring-0 text-slate-600 placeholder-slate-400 text-sm">
+                </div>
+            </div>
             
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 @foreach($barangs as $barang)
@@ -38,6 +48,14 @@
                     </div>
                 @endforeach
             </div>
+            
+            <!-- No Results Message -->
+            <div id="no-results-msg" class="text-center py-12 text-slate-500 hidden">
+                <i class="bi bi-search text-3xl mb-3 block text-slate-400"></i>
+                <p class="text-base font-medium">Barang tidak ditemukan</p>
+                <p class="text-xs text-slate-400 mt-1">Coba masukkan kata kunci pencarian yang lain.</p>
+            </div>
+
             @if($barangs->isEmpty())
                 <div class="text-center py-10 text-slate-500">
                     <i class="bi bi-emoji-frown text-4xl mb-3 block"></i>
@@ -171,6 +189,37 @@
                 }
 
                 grandTotalEl.textContent = formatRupiah(grandTotal);
+            }
+
+            // Client-side live search filtering
+            const searchInput = document.getElementById('search-kasir');
+            const noResultsEl = document.getElementById('no-results-msg');
+            const cards = document.querySelectorAll('[id^="card-"]');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase().trim();
+                    let visibleCount = 0;
+                    
+                    cards.forEach(card => {
+                        const name = card.querySelector('.font-medium').textContent.toLowerCase();
+                        const descEl = card.querySelector('.text-\\[10px\\]');
+                        const desc = descEl ? descEl.textContent.toLowerCase() : '';
+                        
+                        if (name.includes(query) || desc.includes(query)) {
+                            card.style.display = 'flex';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (visibleCount === 0 && cards.length > 0) {
+                        noResultsEl.classList.remove('hidden');
+                    } else {
+                        noResultsEl.classList.add('hidden');
+                    }
+                });
             }
         });
     </script>

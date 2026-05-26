@@ -33,7 +33,7 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-white flex-shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-xl flex flex-col" id="sidebar">
             <div class="h-16 flex items-center px-6 border-b border-slate-800 flex-shrink-0">
-                <i class="bi bi-box-seam-fill text-blue-500 text-xl mr-3"></i>
+                <x-application-logo class="w-6 h-6 text-blue-500 mr-3" />
                 <span class="text-lg font-bold tracking-wide">Toko Diza</span>
             </div>
             

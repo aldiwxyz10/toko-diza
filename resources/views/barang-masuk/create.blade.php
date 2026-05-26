@@ -40,8 +40,8 @@
                     </div>
                     
                     <div>
-                        <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Supplier (Opsional)</label>
-                        <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan') }}" placeholder="Contoh: PT. Plastik Indo"
+                        <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan (Opsional)</label>
+                        <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan') }}" placeholder="Tuliskan keterangan..."
                                class="w-full rounded-lg border-slate-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-colors">
                     </div>
                 </div>
@@ -57,4 +57,56 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+        <!-- Tom Select CSS & JS -->
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+        
+        <style>
+            /* Custom premium styling for Tom Select matching the Toko Diza theme */
+            .ts-wrapper .ts-control {
+                border-color: #cbd5e1 !important; /* border-slate-300 */
+                border-radius: 0.5rem !important; /* rounded-lg */
+                padding: 0.55rem 0.75rem !important;
+                font-size: 0.875rem !important;
+                background-color: #ffffff !important;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                min-height: 42px;
+                display: flex;
+                align-items: center;
+            }
+            .ts-wrapper.focus .ts-control {
+                border-color: #10b981 !important; /* focus-green-500 */
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important; /* focus-green-200 */
+            }
+            .ts-dropdown {
+                border-radius: 0.5rem !important;
+                border-color: #f1f5f9 !important;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+                font-size: 0.875rem !important;
+                margin-top: 4px;
+            }
+            .ts-dropdown .active {
+                background-color: #ecfdf5 !important; /* bg-green-50 */
+                color: #065f46 !important; /* text-green-800 */
+            }
+            .ts-control input {
+                font-size: 0.875rem !important;
+            }
+        </style>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                new TomSelect('#barang_id', {
+                    create: false,
+                    placeholder: "-- Cari & Pilih Barang --",
+                    sortField: {
+                        field: "text",
+                        direction: "asc"
+                    }
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

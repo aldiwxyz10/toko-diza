@@ -135,15 +135,7 @@
             <div class="relative z-10">
                 <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center mb-6
                             border border-white/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" class="w-8 h-8 text-white">
-                        <!-- Elegant soft hanging rope handle (Tali Menggantung Luwes - Menghilangkan Kesan Gembok) -->
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 9c0-4.5 8-4.5 8 0" />
-                        <!-- Rectangular Bag Body (Badan Tas Persegi Panjang) -->
-                        <rect x="5" y="9" width="14" height="12" rx="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        <!-- Horizontal fold line (Garis Lipatan) -->
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" opacity="0.6" />
-                    </svg>
-
+                    <x-application-logo class="w-8 h-8 text-white" />
                 </div>
                 <h1 class="brand-title text-2xl font-normal leading-tight mb-2">
                     Toko Plastik<br/><span class="text-blue-200">Diza</span>

@@ -25,11 +25,23 @@ class BarangController extends Controller
         // Sorting Logic
         $sort = $request->query('sort', 'terbaru');
         switch ($sort) {
+            case 'kode_asc':
+                $query->orderBy('kode_barang', 'asc');
+                break;
+            case 'kode_desc':
+                $query->orderBy('kode_barang', 'desc');
+                break;
             case 'nama_asc':
                 $query->orderBy('nama_barang', 'asc');
                 break;
+            case 'nama_desc':
+                $query->orderBy('nama_barang', 'desc');
+                break;
             case 'stok_asc':
                 $query->orderBy('stok', 'asc');
+                break;
+            case 'stok_desc':
+                $query->orderBy('stok', 'desc');
                 break;
             case 'terbaru':
             default:
@@ -56,7 +68,7 @@ class BarangController extends Controller
             'Plastik' => 'PLK',
             'Bahan Kue & Makanan' => 'BHK',
             'Wadah Makanan' => 'WDM',
-            'Peralatan Makan' => 'PAM',
+            'Peralatan Konsumsi' => 'PAM',
             'Tali & Packing' => 'TLP',
             'Kebutuhan Harian' => 'KBH',
         ];

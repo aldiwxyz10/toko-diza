@@ -1,9 +1,3 @@
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg" {{ $attributes }}>
-    <!-- Elegant soft hanging rope handle (Tali Menggantung Luwes - Menghilangkan Kesan Gembok) -->
-    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9c0-4.5 8-4.5 8 0" />
-    <!-- Rectangular Bag Body (Badan Tas Persegi Panjang) -->
-    <rect x="5" y="9" width="14" height="12" rx="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    <!-- Horizontal fold line (Garis Lipatan) -->
-    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" opacity="0.6" />
+<svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {{ $attributes }}>
+    <path fill-rule="evenodd" d="M5 4v0.5H3.675333333333333c-0.6399999999999999 0 -1.176 0.48266666666666663 -1.2433333333333332 1.1193333333333333l-0.8419999999999999 8A1.25 1.25 0 0 0 2.833333333333333 15h10.333333333333332a1.25 1.25 0 0 0 1.2433333333333332 -1.3806666666666667l-0.8419999999999999 -8a1.25 1.25 0 0 0 -1.2433333333333332 -1.1193333333333333H11V4a3 3 0 1 0 -6 0ZM8 2a2 2 0 0 0 -2 2v0.5h4V4a2 2 0 0 0 -2 -2Zm-2 5.5a2 2 0 1 0 4 0v-0.5a0.5 0.5 0 0 1 1 0v0.5a3 3 0 1 1 -6 0v-0.5a0.5 0.5 0 0 1 1 0v0.5Z" clip-rule="evenodd"></path>
 </svg>
-

@@ -38,7 +38,7 @@
                                 'Plastik',
                                 'Bahan Kue & Makanan',
                                 'Wadah Makanan',
-                                'Peralatan Makan',
+                                'Peralatan Konsumsi',
                                 'Tali & Packing',
                                 'Kebutuhan Harian'
                             ] as $cat)

@@ -37,7 +37,7 @@
                         'Plastik',
                         'Bahan Kue & Makanan',
                         'Wadah Makanan',
-                        'Peralatan Makan',
+                        'Peralatan Konsumsi',
                         'Tali & Packing',
                         'Kebutuhan Harian'
                     ] as $cat)
@@ -52,9 +52,13 @@
                 <div class="relative w-full md:w-48 flex-shrink-0">
                     <select name="sort" onchange="this.form.submit()" 
                             class="appearance-none bg-none w-full pl-9 pr-10 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm h-[42px] border-0 focus:ring-2 focus:ring-blue-300 cursor-pointer">
-                        <option value="terbaru" class="bg-white text-slate-700" {{ $currentSort === 'terbaru' || $currentSort === 'terbaru_desc' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terbaru" class="bg-white text-slate-700" {{ $currentSort === 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="kode_asc" class="bg-white text-slate-700" {{ $currentSort === 'kode_asc' ? 'selected' : '' }}>Kode A - Z</option>
+                        <option value="kode_desc" class="bg-white text-slate-700" {{ $currentSort === 'kode_desc' ? 'selected' : '' }}>Kode Z - A</option>
                         <option value="nama_asc" class="bg-white text-slate-700" {{ $currentSort === 'nama_asc' ? 'selected' : '' }}>Nama A - Z</option>
+                        <option value="nama_desc" class="bg-white text-slate-700" {{ $currentSort === 'nama_desc' ? 'selected' : '' }}>Nama Z - A</option>
                         <option value="stok_asc" class="bg-white text-slate-700" {{ $currentSort === 'stok_asc' ? 'selected' : '' }}>Stok Terendah</option>
+                        <option value="stok_desc" class="bg-white text-slate-700" {{ $currentSort === 'stok_desc' ? 'selected' : '' }}>Stok Tertinggi</option>
                     </select>
                     <!-- Filter/Sort Icon on the left -->
                     <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white pointer-events-none">
@@ -72,12 +76,24 @@
             <table class="w-full text-sm text-left">
                 @php
                     $currentSort = request('sort', 'terbaru');
+                    $codeNextSort = $currentSort === 'kode_asc' ? 'kode_desc' : 'kode_asc';
                     $nameNextSort = $currentSort === 'nama_asc' ? 'nama_desc' : 'nama_asc';
                     $stockNextSort = $currentSort === 'stok_asc' ? 'stok_desc' : 'stok_asc';
                 @endphp
                 <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
                     <tr>
-                        <th class="px-6 py-4 font-semibold">Kode</th>
+                        <th class="px-6 py-4 font-semibold">
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => $codeNextSort]) }}" class="hover:text-blue-600 inline-flex items-center gap-1.5 transition-colors">
+                                Kode
+                                @if($currentSort === 'kode_asc')
+                                    <i class="bi bi-sort-numeric-down text-blue-600 text-sm"></i>
+                                @elseif($currentSort === 'kode_desc')
+                                    <i class="bi bi-sort-numeric-down-alt text-blue-600 text-sm"></i>
+                                @else
+                                    <i class="bi bi-arrow-down-up text-blue-500/70 text-xs hover:text-blue-600 transition-colors"></i>
+                                @endif
+                            </a>
+                        </th>
                         <th class="px-6 py-4 font-semibold">
                             <a href="{{ request()->fullUrlWithQuery(['sort' => $nameNextSort]) }}" class="hover:text-blue-600 inline-flex items-center gap-1.5 transition-colors">
                                 Nama Barang
@@ -86,7 +102,7 @@
                                 @elseif($currentSort === 'nama_desc')
                                     <i class="bi bi-sort-alpha-down-alt text-blue-600 text-sm"></i>
                                 @else
-                                    <i class="bi bi-arrow-down-up text-slate-300 text-[10px] opacity-40 hover:opacity-100"></i>
+                                    <i class="bi bi-arrow-down-up text-blue-500/70 text-xs hover:text-blue-600 transition-colors"></i>
                                 @endif
                             </a>
                         </th>
@@ -99,7 +115,7 @@
                                 @elseif($currentSort === 'stok_desc')
                                     <i class="bi bi-sort-numeric-down-alt text-blue-600 text-sm"></i>
                                 @else
-                                    <i class="bi bi-arrow-down-up text-slate-300 text-[10px] opacity-40 hover:opacity-100"></i>
+                                    <i class="bi bi-arrow-down-up text-blue-500/70 text-xs hover:text-blue-600 transition-colors"></i>
                                 @endif
                             </a>
                         </th>
@@ -174,5 +190,12 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination Links -->
+        @if($barangs->hasPages())
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
+                {{ $barangs->links() }}
+            </div>
+        @endif
     </div>
 </x-app-layout>
