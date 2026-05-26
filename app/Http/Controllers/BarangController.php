@@ -22,7 +22,22 @@ class BarangController extends Controller
             $query->where('jenis', $request->jenis);
         }
 
-        $barangs = $query->orderBy('nama_barang')->paginate(10)->withQueryString();
+        // Sorting Logic
+        $sort = $request->query('sort', 'terbaru');
+        switch ($sort) {
+            case 'nama_asc':
+                $query->orderBy('nama_barang', 'asc');
+                break;
+            case 'stok_asc':
+                $query->orderBy('stok', 'asc');
+                break;
+            case 'terbaru':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $barangs = $query->paginate(10)->withQueryString();
         $jenis   = Barang::distinct()->pluck('jenis');
 
         return view('barang.index', compact('barangs', 'jenis'));
