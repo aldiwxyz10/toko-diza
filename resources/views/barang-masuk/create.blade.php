@@ -35,14 +35,14 @@
                     
                     <div>
                         <label for="jumlah" class="block text-sm font-medium text-slate-700 mb-1">Jumlah Masuk</label>
-                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required placeholder="10"
-                               class="w-full rounded-lg border-slate-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-colors">
+                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required placeholder="0" disabled
+                               class="w-full rounded-lg border-slate-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">
                     </div>
                     
                     <div>
                         <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan (Opsional)</label>
-                        <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan') }}" placeholder="Tuliskan keterangan..."
-                               class="w-full rounded-lg border-slate-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-colors">
+                        <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan') }}" placeholder="Tuliskan keterangan..." disabled
+                               class="w-full rounded-lg border-slate-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">
                     </div>
                 </div>
                 
@@ -98,7 +98,7 @@
         
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                new TomSelect('#barang_id', {
+                const ts = new TomSelect('#barang_id', {
                     create: false,
                     placeholder: "-- Cari & Pilih Barang --",
                     sortField: {
@@ -106,6 +106,36 @@
                         direction: "asc"
                     }
                 });
+
+                // Toggle dynamic input enabling
+                const inputJumlah = document.getElementById('jumlah');
+                const inputKeterangan = document.getElementById('keterangan');
+
+                function updateFields(value) {
+                    const hasValue = value !== '';
+                    inputJumlah.disabled = !hasValue;
+                    inputKeterangan.disabled = !hasValue;
+                }
+
+                // Run once on load
+                updateFields(ts.getValue());
+
+                // On Tom Select change
+                ts.on('change', function(value) {
+                    updateFields(value);
+                });
+
+                // Prevent duplicate submit
+                const form = document.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', function() {
+                        const btn = form.querySelector('button[type="submit"]');
+                        if (btn) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin mr-2 text-sm"></i> Memproses...';
+                        }
+                    });
+                }
             });
         </script>
     @endpush

@@ -106,6 +106,18 @@
                         direction: "asc"
                     }
                 });
+
+                // Prevent duplicate submit
+                const form = document.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', function() {
+                        const btn = form.querySelector('button[type="submit"]');
+                        if (btn) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin mr-2 text-sm"></i> Mengirim...';
+                        }
+                    });
+                }
             });
         </script>
     @endpush

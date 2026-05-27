@@ -133,12 +133,9 @@
                 </div>
                 
                 <div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
-                            <i class="bi bi-box-arrow-right text-lg"></i> Keluar
-                        </button>
-                    </form>
+                    <a href="{{ route('logout') }}" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <i class="bi bi-box-arrow-right text-lg"></i> Keluar
+                    </a>
                 </div>
             </header>
 

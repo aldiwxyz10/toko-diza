@@ -11,6 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Bebaskan route logout dari verifikasi CSRF untuk mencegah bug 419 Page Expired saat session habis
+        $middleware->validateCsrfTokens(except: [
+            'logout',
+        ]);
+
         // Daftarkan alias middleware role
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
