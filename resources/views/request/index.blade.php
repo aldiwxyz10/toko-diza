@@ -23,7 +23,7 @@
                         <th class="px-6 py-4 font-semibold text-left">Barang</th>
                         <th class="px-6 py-4 font-semibold text-center">Jumlah</th>
                         <th class="px-6 py-4 font-semibold text-center">Status</th>
-                        <th class="px-14 py-4 font-semibold text-right">Aksi</th>
+                        <th class="px-6 py-4 font-semibold text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -50,14 +50,14 @@
                                     {{ ucfirst($req->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
+                             <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
                                     @if(auth()->user()->isAdmin() && $req->status === 'pending')
                                         <form action="{{ route('request.updateStatus', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Setujui request ini?');">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="disetujui">
-                                            <button type="submit" class="text-white bg-green-500 hover:bg-green-600 px-2 py-1 rounded text-xs font-medium transition-colors">
+                                            <button type="submit" class="text-white bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-check-lg"></i> Setujui
                                             </button>
                                         </form>
@@ -65,7 +65,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="ditolak">
-                                            <button type="submit" class="text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-xs font-medium transition-colors">
+                                            <button type="submit" class="text-white bg-red-500 hover:bg-red-600 px-3 py-2 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-x-lg"></i> Tolak
                                             </button>
                                         </form>
