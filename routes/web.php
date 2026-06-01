@@ -34,11 +34,12 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/request/{requestStock}/status', [RequestStockController::class, 'updateStatus'])
              ->name('request.updateStatus');
 
-        Route::prefix('laporan')->name('laporan.')->group(function () {
-            Route::get('/stok',   [LaporanController::class, 'stok'])->name('stok');
-            Route::get('/masuk',  [LaporanController::class, 'masuk'])->name('masuk');
-            Route::get('/keluar', [LaporanController::class, 'keluar'])->name('keluar');
-        });
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        
+        // Redirects link lama agar tetap bekerja (backward compatibility)
+        Route::get('/laporan/stok', function() { return redirect()->route('laporan.index', ['tab' => 'stok']); });
+        Route::get('/laporan/masuk', function() { return redirect()->route('laporan.index', ['tab' => 'masuk']); });
+        Route::get('/laporan/keluar', function() { return redirect()->route('laporan.index', ['tab' => 'keluar']); });
     });
 
     // ── USER ONLY ────────────────────────────────────────────────────────

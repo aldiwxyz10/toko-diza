@@ -57,14 +57,14 @@
                 
                 @if(auth()->user()->isAdmin())
                 <x-nav-link href="{{ route('barang-masuk.index') }}" :active="request()->routeIs('barang-masuk.*')">
-                    <i class="bi bi-box-arrow-in-down text-lg"></i> Barang Masuk
+                    <i class="bi bi-box-arrow-in-down text-lg"></i> Data Barang Masuk
                 </x-nav-link>
                 <x-nav-link href="{{ route('barang-keluar.index') }}" :active="request()->routeIs('barang-keluar.*')">
-                    <i class="bi bi-box-arrow-up text-lg"></i> Barang Keluar
+                    <i class="bi bi-box-arrow-up text-lg"></i> Data Barang Keluar
                 </x-nav-link>
                 @else
                 <x-nav-link href="{{ route('kasir.index') }}" :active="request()->routeIs('kasir.*')">
-                    <i class="bi bi-calculator text-lg"></i> Kasir (POS)
+                    <i class="bi bi-calculator text-lg"></i> Kasir
                 </x-nav-link>
                 @endif
                 
@@ -80,19 +80,13 @@
                 
                 @if(auth()->user()->isAdmin())
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Laporan</p>
-                <x-nav-link href="{{ route('laporan.stok') }}" :active="request()->routeIs('laporan.stok')">
-                    <i class="bi bi-bar-chart-line text-lg"></i> Laporan Stok
-                </x-nav-link>
-                <x-nav-link href="{{ route('laporan.masuk') }}" :active="request()->routeIs('laporan.masuk')">
-                    <i class="bi bi-graph-up-arrow text-lg"></i> Laporan Masuk
-                </x-nav-link>
-                <x-nav-link href="{{ route('laporan.keluar') }}" :active="request()->routeIs('laporan.keluar')">
-                    <i class="bi bi-graph-down-arrow text-lg"></i> Laporan Keluar
+                <x-nav-link href="{{ route('laporan.index') }}" :active="request()->routeIs('laporan.index')">
+                    <i class="bi bi-bar-chart-line text-lg"></i> Pusat Laporan
                 </x-nav-link>
                 
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sistem</p>
                 <x-nav-link href="{{ route('user.index') }}" :active="request()->routeIs('user.*')">
-                    <i class="bi bi-people text-lg"></i> Manajemen Pengguna
+                    <i class="bi bi-people text-lg"></i> Manajemen User
                 </x-nav-link>
                 @endif
             </div>

@@ -87,7 +87,7 @@ class BarangMasukController extends Controller
             $barangMasuk->update($validated);
         });
 
-        return redirect()->route('laporan.masuk')->with('success', 'Data barang masuk berhasil diperbarui.');
+        return redirect()->route('laporan.index', ['tab' => 'masuk'])->with('success', 'Data barang masuk berhasil diperbarui.');
     }
 
     public function destroy(BarangMasuk $barangMasuk)

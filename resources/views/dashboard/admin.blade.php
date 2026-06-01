@@ -44,53 +44,6 @@
         </div>
     </div>
 
-    <!-- Panel Aksi Cepat -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <!-- Action 1: Tambah Barang -->
-        <a href="{{ route('barang.create') }}" class="group bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-blue-500 hover:shadow-md transition-all flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <i class="bi bi-plus-lg"></i>
-            </div>
-            <div class="min-w-0">
-                <p class="text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors truncate">Tambah Barang</p>
-                <p class="text-[10px] text-slate-400 truncate">Master katalog</p>
-            </div>
-        </a>
-
-        <!-- Action 2: Barang Masuk -->
-        <a href="{{ route('barang-masuk.create') }}" class="group bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-green-500 hover:shadow-md transition-all flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                <i class="bi bi-box-arrow-in-down"></i>
-            </div>
-            <div class="min-w-0">
-                <p class="text-xs font-semibold text-slate-700 group-hover:text-green-600 transition-colors truncate">Barang Masuk</p>
-                <p class="text-[10px] text-slate-400 truncate">Catat stok masuk</p>
-            </div>
-        </a>
-
-        <!-- Action 3: Barang Keluar -->
-        <a href="{{ route('barang-keluar.create') }}" class="group bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-violet-500 hover:shadow-md transition-all flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-violet-600 group-hover:text-white transition-colors">
-                <i class="bi bi-box-arrow-up"></i>
-            </div>
-            <div class="min-w-0">
-                <p class="text-xs font-semibold text-slate-700 group-hover:text-violet-600 transition-colors truncate">Barang Keluar</p>
-                <p class="text-[10px] text-slate-400 truncate">Catat pengeluaran</p>
-            </div>
-        </a>
-
-        <!-- Action 4: Laporan Stok -->
-        <a href="{{ route('laporan.stok') }}" class="group bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-amber-500 hover:shadow-md transition-all flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                <i class="bi bi-file-earmark-bar-graph"></i>
-            </div>
-            <div class="min-w-0">
-                <p class="text-xs font-semibold text-slate-700 group-hover:text-amber-600 transition-colors truncate">Laporan Stok</p>
-                <p class="text-[10px] text-slate-400 truncate">Cetak & ekspor data</p>
-            </div>
-        </a>
-    </div>
-
     <!-- Grid Counter Utama -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <!-- Card: Total Barang -->

@@ -73,12 +73,20 @@
                                         <form action="{{ route('request.destroy', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Batalkan request ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center gap-1 text-red-600 hover:text-white border border-red-200 hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm" title="Batalkan Request">
-                                                <i class="bi bi-x-circle text-[15px]"></i> Batalkan
+                                            <button type="submit" class="inline-flex items-center gap-1 text-red-600 hover:text-white border border-red-200 hover:bg-red-600 px-5 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm" title="Hapus Request">
+                                                <i class="bi bi-trash3 text-[15px]"></i> Hapus
                                             </button>
                                         </form>
                                     @else
-                                        <span class="text-slate-400 text-sm italic">Selesai</span>
+                                        @if($req->status === 'disetujui')
+                                            <span class="inline-flex items-center gap-1 px-5 py-2 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm" title="Permintaan stok telah disetujui admin dan stok utama bertambah.">
+                                                <i class="bi bi-patch-check-fill text-[15px]"></i> Selesai
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1 px-5 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-slate-400 border border-slate-200" title="Permintaan stok ditolak.">
+                                                <i class="bi bi-x-octagon-fill text-[15px]"></i> Ditolak
+                                            </span>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
