@@ -256,9 +256,9 @@
         </div>
 
         <!-- Kolom Kanan: Stok Kritis (lg:col-span-1) -->
-        <div class="lg:col-span-1">
+        <div class="lg:col-span-1 flex flex-col">
             <!-- Card: Stok Kritis -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col flex-1 h-full">
                 <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <i class="bi bi-exclamation-circle text-red-500"></i>

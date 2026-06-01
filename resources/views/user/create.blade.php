@@ -23,6 +23,8 @@
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                               pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                               title="Masukkan format email yang valid dengan akhiran domain (contoh: nama@email.com)"
                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('email') border-red-500 @enderror">
                         @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>

@@ -179,15 +179,23 @@
                 <div id="panel-qris" class="hidden flex flex-col items-center text-center space-y-4">
                     <div class="p-3 bg-white border border-slate-200 rounded-2xl shadow-sm inline-block">
                         <div class="w-48 h-48 bg-slate-50 flex flex-col items-center justify-center border border-slate-100 rounded-xl relative overflow-hidden">
-                            <svg class="w-36 h-36 text-slate-800 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M3 3h6v6H3zm2 2v2h2V5zm8 0h2v2h-2zm4 0h2v2h-2zm-8 4v2h2V9zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm-12 4h6v6H3zm2 2v2h2v-2zm8 0h2v2h-2zm4 0h2v2h-2z" />
-                                <rect x="3" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
-                                <rect x="15" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
-                                <rect x="3" y="15" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
-                            </svg>
-                            <div class="absolute bottom-1.5 bg-blue-600 text-white font-black text-[9px] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm">
-                                QRIS TOKO DIZA
-                            </div>
+                            @if(file_exists(public_path('images/qris.png')))
+                                <img src="{{ asset('images/qris.png') }}" class="w-full h-full object-contain" alt="QRIS Toko Diza">
+                            @elseif(file_exists(public_path('images/qris.jpg')))
+                                <img src="{{ asset('images/qris.jpg') }}" class="w-full h-full object-contain" alt="QRIS Toko Diza">
+                            @elseif(file_exists(public_path('images/qris.jpeg')))
+                                <img src="{{ asset('images/qris.jpeg') }}" class="w-full h-full object-contain" alt="QRIS Toko Diza">
+                            @else
+                                <svg class="w-36 h-36 text-slate-800 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 3h6v6H3zm2 2v2h2V5zm8 0h2v2h-2zm4 0h2v2h-2zm-8 4v2h2V9zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm-12 4h6v6H3zm2 2v2h2v-2zm8 0h2v2h-2z" />
+                                    <rect x="3" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="15" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                    <rect x="3" y="15" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                <div class="absolute bottom-1.5 bg-blue-600 text-white font-black text-[9px] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm">
+                                    QRIS TOKO DIZA
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <p class="text-xs text-slate-500 max-w-sm leading-relaxed">

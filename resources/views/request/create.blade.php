@@ -35,14 +35,14 @@
                     
                     <div>
                         <label for="jumlah" class="block text-sm font-medium text-slate-700 mb-1">Jumlah yang Direquest</label>
-                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required placeholder="Contoh: 50"
-                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required disabled placeholder="Pilih barang terlebih dahulu..."
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">
                     </div>
                     
                     <div>
-                        <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Alasan (Opsional)</label>
-                        <textarea name="keterangan" id="keterangan" rows="3" placeholder="Contoh: Ada pelanggan besar butuh banyak minggu depan..."
-                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">{{ old('keterangan') }}</textarea>
+                        <label for="catatan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Alasan (Opsional)</label>
+                        <textarea name="catatan" id="catatan" rows="3" disabled placeholder="Pilih barang terlebih dahulu..."
+                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">{{ old('catatan') }}</textarea>
                     </div>
                 </div>
                 
@@ -98,7 +98,7 @@
         
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                new TomSelect('#barang_id', {
+                const barangSelect = new TomSelect('#barang_id', {
                     create: false,
                     placeholder: "-- Cari & Pilih Barang --",
                     sortField: {
@@ -107,14 +107,49 @@
                     }
                 });
 
+                const jumlahInput = document.getElementById('jumlah');
+                const keteranganInput = document.getElementById('catatan');
+
+                // Buka/kunci input secara dinamis saat barang dipilih
+                barangSelect.on('change', function(value) {
+                    if (value) {
+                        jumlahInput.removeAttribute('disabled');
+                        keteranganInput.removeAttribute('disabled');
+                        jumlahInput.placeholder = "Contoh: 50";
+                        keteranganInput.placeholder = "Contoh: Ada pelanggan besar butuh banyak minggu depan...";
+                    } else {
+                        jumlahInput.setAttribute('disabled', 'true');
+                        keteranganInput.setAttribute('disabled', 'true');
+                        jumlahInput.value = '';
+                        keteranganInput.value = '';
+                        jumlahInput.placeholder = "Pilih barang terlebih dahulu...";
+                        keteranganInput.placeholder = "Pilih barang terlebih dahulu...";
+                    }
+                });
+
+                // Jika ada old input (validation error), buka kunci form otomatis
+                if (barangSelect.getValue()) {
+                    jumlahInput.removeAttribute('disabled');
+                    keteranganInput.removeAttribute('disabled');
+                    jumlahInput.placeholder = "Contoh: 50";
+                    keteranganInput.placeholder = "Contoh: Ada pelanggan besar butuh banyak minggu depan...";
+                }
+
                 // Prevent duplicate submit
                 const form = document.querySelector('form');
                 if (form) {
-                    form.addEventListener('submit', function() {
+                    form.addEventListener('submit', function(e) {
+                        if (form.classList.contains('form-submitting')) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        form.classList.add('form-submitting');
+                        
                         const btn = form.querySelector('button[type="submit"]');
                         if (btn) {
-                            btn.disabled = true;
                             btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin mr-2 text-sm"></i> Mengirim...';
+                            btn.style.pointerEvents = 'none';
+                            btn.style.opacity = '0.7';
                         }
                     });
                 }

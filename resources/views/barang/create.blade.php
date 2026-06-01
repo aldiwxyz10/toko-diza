@@ -123,11 +123,18 @@
             // Prevent duplicate submit
             const form = document.querySelector('form');
             if (form) {
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function(e) {
+                    if (form.classList.contains('form-submitting')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    form.classList.add('form-submitting');
+                    
                     const btn = form.querySelector('button[type="submit"]');
                     if (btn) {
-                        btn.disabled = true;
                         btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin mr-2 text-sm"></i> Menyimpan...';
+                        btn.style.pointerEvents = 'none';
+                        btn.style.opacity = '0.7';
                     }
                 });
             }
