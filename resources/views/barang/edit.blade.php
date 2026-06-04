@@ -22,16 +22,28 @@
                     </div>
                     
                     <div>
-                        <label for="nama_barang" class="block text-sm font-medium text-slate-700 mb-1">Nama Barang</label>
+                        <label for="nama_barang" class="block text-sm font-medium text-slate-700 mb-1">Nama Barang <span class="text-red-500">*</span></label>
                         <input type="text" name="nama_barang" id="nama_barang" value="{{ old('nama_barang', $barang->nama_barang) }}" required
                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('nama_barang') border-red-500 @enderror">
                         @error('nama_barang') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     
                     <div>
-                        <label for="jenis" class="block text-sm font-medium text-slate-700 mb-1">Jenis / Kategori</label>
-                        <input type="text" name="jenis" id="jenis" value="{{ old('jenis', $barang->jenis) }}" required
-                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                        <label for="jenis" class="block text-sm font-medium text-slate-700 mb-1">Jenis / Kategori <span class="text-red-500">*</span></label>
+                        <select name="jenis" id="jenis" required
+                                class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors @error('jenis') border-red-500 @enderror">
+                            @foreach([
+                                'Plastik',
+                                'Bahan Kue & Makanan',
+                                'Wadah Makanan',
+                                'Peralatan Konsumsi',
+                                'Tali & Packing',
+                                'Kebutuhan Harian'
+                            ] as $cat)
+                                <option value="{{ $cat }}" {{ old('jenis', $barang->jenis) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            @endforeach
+                        </select>
+                        @error('jenis') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -43,10 +55,18 @@
                         </div>
                         
                         <div>
-                            <label for="harga" class="block text-sm font-medium text-slate-700 mb-1">Harga Satuan (Rp)</label>
+                            <label for="harga" class="block text-sm font-medium text-slate-700 mb-1">Harga Satuan (Rp) <span class="text-red-500">*</span></label>
                             <input type="number" name="harga" id="harga" value="{{ old('harga', $barang->harga) }}" min="0" required
                                    class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                         </div>
+                    </div>
+
+                    <div>
+                        <label for="deskripsi" class="block text-sm font-medium text-slate-700 mb-1">Deskripsi / Spesifikasi (Opsional)</label>
+                        <textarea name="deskripsi" id="deskripsi" rows="3"
+                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors text-slate-600 placeholder-slate-400 text-sm"
+                                  placeholder="Contoh: Ukuran 10x15 cm, ketebalan 0.5mm, isi 100 pcs per pak, merk Bawang...">{{ old('deskripsi', $barang->deskripsi) }}</textarea>
+                        @error('deskripsi') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 

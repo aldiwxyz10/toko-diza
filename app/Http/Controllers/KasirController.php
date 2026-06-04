@@ -24,6 +24,9 @@ class KasirController extends Controller
             'barang_id.*' => 'required|exists:barangs,id',
             'jumlah' => 'required|array',
             'jumlah.*' => 'required|integer|min:1',
+            'metode_pembayaran' => 'required|in:tunai,qris',
+            'bayar' => 'required_if:metode_pembayaran,tunai|nullable|integer',
+            'kembalian' => 'required_if:metode_pembayaran,tunai|nullable|integer',
         ]);
 
         try {
@@ -57,6 +60,9 @@ class KasirController extends Controller
                 'user_id' => auth()->id(),
                 'total_harga' => $total_harga,
                 'tanggal' => now(),
+                'metode_pembayaran' => $request->metode_pembayaran,
+                'bayar' => $request->metode_pembayaran === 'tunai' ? $request->bayar : null,
+                'kembalian' => $request->metode_pembayaran === 'tunai' ? $request->kembalian : null,
             ]);
 
             // Simpan Detail dan Kurangi Stok

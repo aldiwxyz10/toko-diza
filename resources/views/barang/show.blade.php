@@ -54,6 +54,15 @@
                         <p class="text-sm font-medium text-slate-500 mb-1">Ditambahkan Pada</p>
                         <p class="text-base text-slate-700">{{ $barang->created_at->format('d M Y, H:i') }}</p>
                     </div>
+                    
+                    <div class="md:col-span-2 pt-4 border-t border-slate-100">
+                        <p class="text-sm font-medium text-slate-500 mb-1">Deskripsi / Spesifikasi</p>
+                        @if($barang->deskripsi)
+                            <p class="text-base text-slate-700 bg-slate-50 rounded-lg p-3 border border-slate-100 whitespace-pre-line">{{ $barang->deskripsi }}</p>
+                        @else
+                            <p class="text-sm text-slate-400 italic bg-slate-50/50 rounded-lg p-3 border border-slate-100/55">Tidak ada deskripsi atau spesifikasi tambahan.</p>
+                        @endif
+                    </div>
                 </div>
             </div>
             <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">

@@ -16,29 +16,29 @@
             <table class="w-full text-sm text-left">
                 <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
                     <tr>
-                        <th class="px-6 py-4 font-semibold">Tanggal</th>
+                        <th class="px-6 py-4 font-semibold text-left">Tanggal</th>
                         @if(auth()->user()->isAdmin())
-                        <th class="px-6 py-4 font-semibold">Peminta</th>
+                        <th class="px-6 py-4 font-semibold text-left">Peminta</th>
                         @endif
-                        <th class="px-6 py-4 font-semibold">Barang</th>
-                        <th class="px-6 py-4 font-semibold">Jumlah</th>
-                        <th class="px-6 py-4 font-semibold">Status</th>
-                        <th class="px-6 py-4 font-semibold text-right">Aksi</th>
+                        <th class="px-6 py-4 font-semibold text-left">Barang</th>
+                        <th class="px-6 py-4 font-semibold text-center">Jumlah</th>
+                        <th class="px-6 py-4 font-semibold text-center">Status</th>
+                        <th class="px-6 py-4 font-semibold text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($requests as $req)
                         <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap text-slate-600">{{ $req->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-slate-600 text-left">{{ $req->created_at->format('d/m/Y H:i') }}</td>
                             @if(auth()->user()->isAdmin())
-                            <td class="px-6 py-4 font-medium text-slate-800">{{ $req->user->name }}</td>
+                            <td class="px-6 py-4 font-medium text-slate-800 text-left">{{ $req->user->name }}</td>
                             @endif
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-left">
                                 <span class="font-medium text-slate-800">{{ $req->barang->nama_barang }}</span>
                                 <div class="text-xs text-slate-500">Stok saat ini: {{ $req->barang->stok }}</div>
                             </td>
-                            <td class="px-6 py-4 text-slate-800 font-medium">{{ $req->jumlah }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-slate-800 font-medium text-center">{{ $req->jumlah }}</td>
+                            <td class="px-6 py-4 text-center">
                                 @php
                                     $color = match($req->status) {
                                         'disetujui' => 'green',
@@ -50,14 +50,14 @@
                                     {{ ucfirst($req->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
+                             <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
                                     @if(auth()->user()->isAdmin() && $req->status === 'pending')
                                         <form action="{{ route('request.updateStatus', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Setujui request ini?');">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="disetujui">
-                                            <button type="submit" class="text-white bg-green-500 hover:bg-green-600 px-2 py-1 rounded text-xs font-medium transition-colors">
+                                            <button type="submit" class="text-white bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-check-lg"></i> Setujui
                                             </button>
                                         </form>
@@ -65,7 +65,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="ditolak">
-                                            <button type="submit" class="text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-xs font-medium transition-colors">
+                                            <button type="submit" class="text-white bg-red-500 hover:bg-red-600 px-3 py-2 rounded text-xs font-medium transition-colors">
                                                 <i class="bi bi-x-lg"></i> Tolak
                                             </button>
                                         </form>
@@ -73,12 +73,20 @@
                                         <form action="{{ route('request.destroy', $req) }}" method="POST" class="inline-block" onsubmit="return confirm('Batalkan request ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-slate-500 hover:text-red-600 p-1 hover:bg-slate-100 rounded transition-colors" title="Batalkan Request">
-                                                <i class="bi bi-trash3 text-lg"></i>
+                                            <button type="submit" class="inline-flex items-center gap-1 text-red-600 hover:text-white border border-red-200 hover:bg-red-600 px-5 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm" title="Hapus Request">
+                                                <i class="bi bi-trash3 text-[15px]"></i> Hapus
                                             </button>
                                         </form>
                                     @else
-                                        <span class="text-slate-400 text-sm italic">Selesai</span>
+                                        @if($req->status === 'disetujui')
+                                            <span class="inline-flex items-center gap-1 px-5 py-2 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm" title="Permintaan stok telah disetujui admin dan stok utama bertambah.">
+                                                <i class="bi bi-patch-check-fill text-[15px]"></i> Selesai
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1 px-5 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-slate-400 border border-slate-200" title="Permintaan stok ditolak.">
+                                                <i class="bi bi-x-octagon-fill text-[15px]"></i> Ditolak
+                                            </span>
+                                        @endif
                                     @endif
                                 </div>
                             </td>

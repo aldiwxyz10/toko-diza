@@ -33,7 +33,7 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-white flex-shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-xl flex flex-col" id="sidebar">
             <div class="h-16 flex items-center px-6 border-b border-slate-800 flex-shrink-0">
-                <i class="bi bi-box-seam-fill text-blue-500 text-xl mr-3"></i>
+                <x-application-logo class="w-6 h-6 text-blue-500 mr-3" />
                 <span class="text-lg font-bold tracking-wide">Toko Diza</span>
             </div>
             
@@ -57,14 +57,14 @@
                 
                 @if(auth()->user()->isAdmin())
                 <x-nav-link href="{{ route('barang-masuk.index') }}" :active="request()->routeIs('barang-masuk.*')">
-                    <i class="bi bi-box-arrow-in-down text-lg"></i> Barang Masuk
+                    <i class="bi bi-box-arrow-in-down text-lg"></i> Data Barang Masuk
                 </x-nav-link>
                 <x-nav-link href="{{ route('barang-keluar.index') }}" :active="request()->routeIs('barang-keluar.*')">
-                    <i class="bi bi-box-arrow-up text-lg"></i> Barang Keluar
+                    <i class="bi bi-box-arrow-up text-lg"></i> Data Barang Keluar
                 </x-nav-link>
                 @else
                 <x-nav-link href="{{ route('kasir.index') }}" :active="request()->routeIs('kasir.*')">
-                    <i class="bi bi-calculator text-lg"></i> Kasir (POS)
+                    <i class="bi bi-calculator text-lg"></i> Kasir
                 </x-nav-link>
                 @endif
                 
@@ -80,19 +80,13 @@
                 
                 @if(auth()->user()->isAdmin())
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Laporan</p>
-                <x-nav-link href="{{ route('laporan.stok') }}" :active="request()->routeIs('laporan.stok')">
-                    <i class="bi bi-bar-chart-line text-lg"></i> Laporan Stok
-                </x-nav-link>
-                <x-nav-link href="{{ route('laporan.masuk') }}" :active="request()->routeIs('laporan.masuk')">
-                    <i class="bi bi-graph-up-arrow text-lg"></i> Laporan Masuk
-                </x-nav-link>
-                <x-nav-link href="{{ route('laporan.keluar') }}" :active="request()->routeIs('laporan.keluar')">
-                    <i class="bi bi-graph-down-arrow text-lg"></i> Laporan Keluar
+                <x-nav-link href="{{ route('laporan.index') }}" :active="request()->routeIs('laporan.index')">
+                    <i class="bi bi-bar-chart-line text-lg"></i> Pusat Laporan
                 </x-nav-link>
                 
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sistem</p>
                 <x-nav-link href="{{ route('user.index') }}" :active="request()->routeIs('user.*')">
-                    <i class="bi bi-people text-lg"></i> Manajemen Pengguna
+                    <i class="bi bi-people text-lg"></i> Manajemen User
                 </x-nav-link>
                 @endif
             </div>
@@ -133,12 +127,9 @@
                 </div>
                 
                 <div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
-                            <i class="bi bi-box-arrow-right text-lg"></i> Keluar
-                        </button>
-                    </form>
+                    <a href="{{ route('logout') }}" class="text-sm font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <i class="bi bi-box-arrow-right text-lg"></i> Keluar
+                    </a>
                 </div>
             </header>
 

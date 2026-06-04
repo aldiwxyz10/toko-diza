@@ -35,14 +35,14 @@
                     
                     <div>
                         <label for="jumlah" class="block text-sm font-medium text-slate-700 mb-1">Jumlah yang Direquest</label>
-                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required placeholder="Contoh: 50"
-                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
+                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" required disabled placeholder="Pilih barang terlebih dahulu..."
+                               class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">
                     </div>
                     
                     <div>
-                        <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Alasan (Opsional)</label>
-                        <textarea name="keterangan" id="keterangan" rows="3" placeholder="Contoh: Ada pelanggan besar butuh banyak minggu depan..."
-                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">{{ old('keterangan') }}</textarea>
+                        <label for="catatan" class="block text-sm font-medium text-slate-700 mb-1">Keterangan / Alasan (Opsional)</label>
+                        <textarea name="catatan" id="catatan" rows="3" disabled placeholder="Pilih barang terlebih dahulu..."
+                                  class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed">{{ old('catatan') }}</textarea>
                     </div>
                 </div>
                 
@@ -57,4 +57,103 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+        <!-- Tom Select CSS & JS -->
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+        
+        <style>
+            /* Custom premium styling for Tom Select matching the Toko Diza theme (Blue Accent) */
+            .ts-wrapper .ts-control {
+                border-color: #cbd5e1 !important; /* border-slate-300 */
+                border-radius: 0.5rem !important; /* rounded-lg */
+                padding: 0.55rem 0.75rem !important;
+                font-size: 0.875rem !important;
+                background-color: #ffffff !important;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                min-height: 42px;
+                display: flex;
+                align-items: center;
+            }
+            .ts-wrapper.focus .ts-control {
+                border-color: #3b82f6 !important; /* focus-blue-500 */
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important; /* focus-blue-200 */
+            }
+            .ts-dropdown {
+                border-radius: 0.5rem !important;
+                border-color: #f1f5f9 !important;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+                font-size: 0.875rem !important;
+                margin-top: 4px;
+            }
+            .ts-dropdown .active {
+                background-color: #eff6ff !important; /* bg-blue-50 */
+                color: #1e40af !important; /* text-blue-800 */
+            }
+            .ts-control input {
+                font-size: 0.875rem !important;
+            }
+        </style>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const barangSelect = new TomSelect('#barang_id', {
+                    create: false,
+                    placeholder: "-- Cari & Pilih Barang --",
+                    sortField: {
+                        field: "text",
+                        direction: "asc"
+                    }
+                });
+
+                const jumlahInput = document.getElementById('jumlah');
+                const keteranganInput = document.getElementById('catatan');
+
+                // Buka/kunci input secara dinamis saat barang dipilih
+                barangSelect.on('change', function(value) {
+                    if (value) {
+                        jumlahInput.removeAttribute('disabled');
+                        keteranganInput.removeAttribute('disabled');
+                        jumlahInput.placeholder = "Contoh: 50";
+                        keteranganInput.placeholder = "Contoh: Ada pelanggan besar butuh banyak minggu depan...";
+                    } else {
+                        jumlahInput.setAttribute('disabled', 'true');
+                        keteranganInput.setAttribute('disabled', 'true');
+                        jumlahInput.value = '';
+                        keteranganInput.value = '';
+                        jumlahInput.placeholder = "Pilih barang terlebih dahulu...";
+                        keteranganInput.placeholder = "Pilih barang terlebih dahulu...";
+                    }
+                });
+
+                // Jika ada old input (validation error), buka kunci form otomatis
+                if (barangSelect.getValue()) {
+                    jumlahInput.removeAttribute('disabled');
+                    keteranganInput.removeAttribute('disabled');
+                    jumlahInput.placeholder = "Contoh: 50";
+                    keteranganInput.placeholder = "Contoh: Ada pelanggan besar butuh banyak minggu depan...";
+                }
+
+                // Prevent duplicate submit
+                const form = document.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        if (form.classList.contains('form-submitting')) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        form.classList.add('form-submitting');
+                        
+                        const btn = form.querySelector('button[type="submit"]');
+                        if (btn) {
+                            btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin mr-2 text-sm"></i> Mengirim...';
+                            btn.style.pointerEvents = 'none';
+                            btn.style.opacity = '0.7';
+                        }
+                    });
+                }
+            });
+        </script>
+    @endpush
 </x-app-layout>

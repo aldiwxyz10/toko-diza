@@ -1,12 +1,12 @@
 <x-app-layout>
-    <x-slot name="title">Manajemen Pengguna</x-slot>
-    <x-slot name="header">Manajemen Pengguna</x-slot>
+    <x-slot name="title">Manajemen User</x-slot>
+    <x-slot name="header">Manajemen User</x-slot>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 class="text-lg font-semibold text-slate-800">Daftar Pengguna Sistem</h3>
             <a href="{{ route('user.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors text-sm">
-                <i class="bi bi-person-plus mr-2"></i> Tambah Pengguna
+                <i class="bi bi-person-plus mr-2"></i> Tambah User
             </a>
         </div>
         

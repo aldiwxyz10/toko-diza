@@ -48,7 +48,7 @@
                 </div>
                 
                 <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
-                    <a href="{{ route('laporan.masuk') }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                    <a href="{{ route('laporan.index', ['tab' => 'masuk']) }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
                         Batal
                     </a>
                     <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors shadow-sm">

@@ -9,7 +9,7 @@ class Barang extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kode_barang', 'nama_barang', 'jenis', 'stok', 'harga'];
+    protected $fillable = ['kode_barang', 'nama_barang', 'jenis', 'stok', 'harga', 'deskripsi'];
 
     protected $casts = [
         'harga' => 'decimal:2',

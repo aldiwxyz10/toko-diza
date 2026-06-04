@@ -22,7 +22,34 @@ class BarangController extends Controller
             $query->where('jenis', $request->jenis);
         }
 
-        $barangs = $query->orderBy('nama_barang')->paginate(10)->withQueryString();
+        // Sorting Logic
+        $sort = $request->query('sort', 'terbaru');
+        switch ($sort) {
+            case 'kode_asc':
+                $query->orderBy('kode_barang', 'asc');
+                break;
+            case 'kode_desc':
+                $query->orderBy('kode_barang', 'desc');
+                break;
+            case 'nama_asc':
+                $query->orderBy('nama_barang', 'asc');
+                break;
+            case 'nama_desc':
+                $query->orderBy('nama_barang', 'desc');
+                break;
+            case 'stok_asc':
+                $query->orderBy('stok', 'asc');
+                break;
+            case 'stok_desc':
+                $query->orderBy('stok', 'desc');
+                break;
+            case 'terbaru':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $barangs = $query->paginate(10)->withQueryString();
         $jenis   = Barang::distinct()->pluck('jenis');
 
         return view('barang.index', compact('barangs', 'jenis'));
@@ -33,6 +60,38 @@ class BarangController extends Controller
         return view('barang.create');
     }
 
+    public function getNextCode(Request $request)
+    {
+        $jenis = $request->query('jenis');
+
+        $prefixes = [
+            'Plastik' => 'PLK',
+            'Bahan Kue & Makanan' => 'BHK',
+            'Wadah Makanan' => 'WDM',
+            'Peralatan Konsumsi' => 'PAM',
+            'Tali & Packing' => 'TLP',
+            'Kebutuhan Harian' => 'KBH',
+        ];
+
+        $prefix = $prefixes[$jenis] ?? 'BRG';
+
+        $latest = Barang::where('kode_barang', 'like', "$prefix-%")->latest('id')->first();
+
+        if (!$latest) {
+            $nextCode = $prefix . '-001';
+        } else {
+            $string = preg_replace("/[^0-9]/", "", $latest->kode_barang);
+            if (empty($string)) {
+                $nextCode = $prefix . '-001';
+            } else {
+                $number = intval($string) + 1;
+                $nextCode = $prefix . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+            }
+        }
+
+        return response()->json(['next_code' => $nextCode]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -41,6 +100,7 @@ class BarangController extends Controller
             'jenis'       => 'required|string|max:50',
             'stok'        => 'required|integer|min:0',
             'harga'       => 'required|numeric|min:0',
+            'deskripsi'   => 'nullable|string',
         ]);
 
         $barang = Barang::create($validated);
@@ -80,6 +140,7 @@ class BarangController extends Controller
             'jenis'       => 'required|string|max:50',
             'stok'        => 'required|integer|min:0',
             'harga'       => 'required|numeric|min:0',
+            'deskripsi'   => 'nullable|string',
         ]);
 
         $selisih = $validated['stok'] - $barang->stok;

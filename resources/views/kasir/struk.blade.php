@@ -86,9 +86,32 @@
         <div class="border-t border-dashed border-slate-300 my-4"></div>
 
         <!-- Total -->
-        <div class="text-sm font-bold flex justify-between mb-6">
+        <div class="text-sm font-bold flex justify-between mb-2">
             <span>TOTAL</span>
             <span>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
+        </div>
+
+        <!-- Rincian Pembayaran -->
+        <div class="text-xs space-y-1 mb-6">
+            <div class="flex justify-between">
+                <span>Bayar Via:</span>
+                <span class="font-semibold uppercase">{{ $transaksi->metode_pembayaran }}</span>
+            </div>
+            @if($transaksi->metode_pembayaran === 'tunai')
+            <div class="flex justify-between">
+                <span>Tunai:</span>
+                <span>Rp {{ number_format($transaksi->bayar, 0, ',', '.') }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Kembali:</span>
+                <span>Rp {{ number_format($transaksi->kembalian, 0, ',', '.') }}</span>
+            </div>
+            @else
+            <div class="flex justify-between text-emerald-600 font-semibold">
+                <span>Status:</span>
+                <span>LUNAS (QRIS)</span>
+            </div>
+            @endif
         </div>
 
         <!-- Footer -->
