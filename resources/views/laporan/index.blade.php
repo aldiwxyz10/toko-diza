@@ -284,40 +284,42 @@
 
         <!-- Summary Cards & Filter (no-print) -->
         <div class="no-print bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-            <form action="{{ route('laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <form action="{{ route('laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                 <input type="hidden" name="tab" value="masuk">
                 
-                <div>
+                <div class="md:col-span-2">
                     <label for="tanggal_dari_masuk" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Dari Tanggal</label>
                     <input type="date" name="tanggal_dari" id="tanggal_dari_masuk" value="{{ request('tanggal_dari') }}" 
                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 </div>
-                <div>
+                <div class="md:col-span-2">
                     <label for="tanggal_sampai_masuk" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sampai Tanggal</label>
                     <input type="date" name="tanggal_sampai" id="tanggal_sampai_masuk" value="{{ request('tanggal_sampai') }}" 
                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 </div>
-                <div>
-                    <label for="masuk_barang_id" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Pilih Barang</label>
-                    <select name="masuk_barang_id" id="masuk_barang_id" 
-                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                        <option value="">Semua Barang</option>
-                        @foreach($allBarangsList as $b)
-                            <option value="{{ $b->id }}" {{ request('masuk_barang_id') == $b->id ? 'selected' : '' }}>{{ $b->kode_barang }} - {{ $b->nama_barang }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="flex gap-2 justify-end">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm">
+                <div class="md:col-span-6 flex gap-2 items-end">
+                    <div class="flex-1">
+                        <label for="masuk_barang_id" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Pilih Barang</label>
+                        <select name="masuk_barang_id" id="masuk_barang_id" 
+                                class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            <option value="">Semua Barang</option>
+                            @foreach($allBarangsList as $b)
+                                <option value="{{ $b->id }}" {{ request('masuk_barang_id') == $b->id ? 'selected' : '' }}>{{ $b->kode_barang }} - {{ $b->nama_barang }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm h-[36px]">
                         <i class="bi bi-filter"></i> Filter
                     </button>
                     @if(request()->filled('tanggal_dari') || request()->filled('tanggal_sampai') || request()->filled('masuk_barang_id'))
-                        <a href="{{ route('laporan.index', ['tab' => 'masuk']) }}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 font-semibold text-xs transition-colors flex items-center">
+                        <a href="{{ route('laporan.index', ['tab' => 'masuk']) }}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 font-semibold text-xs transition-colors flex items-center h-[36px]">
                             Reset
                         </a>
                     @endif
-                    <button type="button" onclick="printReport('masuk')" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm">
+                </div>
+                
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="button" onclick="printReport('masuk')" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm h-[36px]">
                         <i class="bi bi-printer"></i> Cetak
                     </button>
                 </div>
@@ -387,40 +389,42 @@
 
         <!-- Summary Cards & Filter (no-print) -->
         <div class="no-print bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-            <form action="{{ route('laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <form action="{{ route('laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                 <input type="hidden" name="tab" value="keluar">
                 
-                <div>
+                <div class="md:col-span-2">
                     <label for="tanggal_dari_keluar" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Dari Tanggal</label>
                     <input type="date" name="tanggal_dari" id="tanggal_dari_keluar" value="{{ request('tanggal_dari') }}" 
                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 </div>
-                <div>
+                <div class="md:col-span-2">
                     <label for="tanggal_sampai_keluar" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sampai Tanggal</label>
                     <input type="date" name="tanggal_sampai" id="tanggal_sampai_keluar" value="{{ request('tanggal_sampai') }}" 
                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 </div>
-                <div>
-                    <label for="keluar_barang_id" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Pilih Barang</label>
-                    <select name="keluar_barang_id" id="keluar_barang_id" 
-                            class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                        <option value="">Semua Barang</option>
-                        @foreach($allBarangsList as $b)
-                            <option value="{{ $b->id }}" {{ request('keluar_barang_id') == $b->id ? 'selected' : '' }}>{{ $b->kode_barang }} - {{ $b->nama_barang }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="flex gap-2 justify-end">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm">
+                <div class="md:col-span-6 flex gap-2 items-end">
+                    <div class="flex-1">
+                        <label for="keluar_barang_id" class="block text-xs font-semibold text-slate-500 uppercase mb-1">Pilih Barang</label>
+                        <select name="keluar_barang_id" id="keluar_barang_id" 
+                                class="w-full text-xs rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            <option value="">Semua Barang</option>
+                            @foreach($allBarangsList as $b)
+                                <option value="{{ $b->id }}" {{ request('keluar_barang_id') == $b->id ? 'selected' : '' }}>{{ $b->kode_barang }} - {{ $b->nama_barang }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm h-[36px]">
                         <i class="bi bi-filter"></i> Filter
                     </button>
                     @if(request()->filled('tanggal_dari') || request()->filled('tanggal_sampai') || request()->filled('keluar_barang_id'))
-                        <a href="{{ route('laporan.index', ['tab' => 'keluar']) }}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 font-semibold text-xs transition-colors flex items-center">
+                        <a href="{{ route('laporan.index', ['tab' => 'keluar']) }}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 font-semibold text-xs transition-colors flex items-center h-[36px]">
                             Reset
                         </a>
                     @endif
-                    <button type="button" onclick="printReport('keluar')" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm">
+                </div>
+                
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="button" onclick="printReport('keluar')" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm h-[36px]">
                         <i class="bi bi-printer"></i> Cetak
                     </button>
                 </div>
