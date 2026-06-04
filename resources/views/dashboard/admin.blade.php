@@ -1,6 +1,6 @@
 <x-app-layout>
-    <x-slot name="title">Dashboard Admin</x-slot>
-    <x-slot name="header">Dashboard Admin</x-slot>
+    <x-slot name="title">Beranda Admin</x-slot>
+    <x-slot name="header">Beranda Admin</x-slot>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <!-- Card: Total Barang -->
