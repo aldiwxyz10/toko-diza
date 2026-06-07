@@ -1,12 +1,46 @@
 <x-app-layout>
-    <x-slot name="title">Dashboard User</x-slot>
-    <x-slot name="header">Dashboard</x-slot>
+    <x-slot name="title">Beranda User</x-slot>
+    <x-slot name="header">Beranda</x-slot>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-8 mb-6 relative overflow-hidden">
-        <div class="absolute right-0 top-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
-        <div class="relative z-10">
-            <h3 class="text-2xl font-bold text-slate-800 mb-2">Selamat Datang, {{ auth()->user()->name }}!</h3>
-            <p class="text-slate-500">Anda masuk sebagai Karyawan. Pantau stok barang dan ajukan permintaan stok jika diperlukan.</p>
+    <!-- Spanduk Selamat Datang Premium -->
+    <div class="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-700 rounded-2xl p-6 md:p-8 text-white mb-6 overflow-hidden shadow-md">
+        <!-- Decorative background circles -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
+        
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                @php
+                    $jam = date('H');
+                    if ($jam >= 5 && $jam < 11) {
+                        $salam = 'Selamat Pagi';
+                    } elseif ($jam >= 11 && $jam < 15) {
+                        $salam = 'Selamat Siang';
+                    } elseif ($jam >= 15 && $jam < 18) {
+                        $salam = 'Selamat Sore';
+                    } else {
+                        $salam = 'Selamat Malam';
+                    }
+                @endphp
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-1">
+                    {{ $salam }}, {{ auth()->user()->name }}! 👋
+                </h2>
+                <p class="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-xl">
+                    Anda masuk sebagai Karyawan. Pantau stok barang dan ajukan permintaan stok jika diperlukan.
+                </p>
+            </div>
+            <div class="flex items-center gap-2.5 bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 flex-shrink-0 self-start md:self-auto shadow-inner">
+                <i class="bi bi-calendar3 text-xl text-blue-200"></i>
+                <div class="text-left">
+                    <p class="text-[10px] text-blue-200 font-semibold uppercase tracking-wider leading-none mb-0.5">Hari Ini</p>
+                    @php
+                        $hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                        $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                        $tglStr = $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[date('n')] . ' ' . date('Y');
+                    @endphp
+                    <p class="text-xs font-bold leading-none">{{ $tglStr }}</p>
+                </div>
+            </div>
         </div>
     </div>
 
