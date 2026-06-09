@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('transaksis', function (Blueprint $table) {
+        Schema::table('transaksi', function (Blueprint $table) {
             $table->string('metode_pembayaran')->default('tunai')->after('total_harga');
             $table->integer('bayar')->nullable()->after('metode_pembayaran');
             $table->integer('kembalian')->nullable()->after('bayar');
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('transaksis', function (Blueprint $table) {
+        Schema::table('transaksi', function (Blueprint $table) {
             $table->dropColumn(['metode_pembayaran', 'bayar', 'kembalian']);
         });
     }

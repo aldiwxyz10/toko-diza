@@ -21,7 +21,7 @@ class KasirController extends Controller
     {
         $request->validate([
             'barang_id' => 'required|array',
-            'barang_id.*' => 'required|exists:barangs,id',
+            'barang_id.*' => 'required|exists:barang,id',
             'jumlah' => 'required|array',
             'jumlah.*' => 'required|integer|min:1',
             'metode_pembayaran' => 'required|in:tunai,qris',

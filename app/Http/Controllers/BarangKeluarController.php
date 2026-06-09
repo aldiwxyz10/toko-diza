@@ -37,7 +37,7 @@ class BarangKeluarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'barang_id'  => 'required|exists:barangs,id',
+            'barang_id'  => 'required|exists:barang,id',
             'jumlah'     => 'required|integer|min:1',
             'tanggal'    => 'required|date',
             'keterangan' => 'nullable|string|max:255',
