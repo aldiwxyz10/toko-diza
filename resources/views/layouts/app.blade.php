@@ -81,7 +81,7 @@
                 @if(auth()->user()->isAdmin())
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Laporan</p>
                 <x-nav-link href="{{ route('laporan.index') }}" :active="request()->routeIs('laporan.index')">
-                    <i class="bi bi-bar-chart-line text-lg"></i> Pusat Laporan
+                    <i class="bi bi-bar-chart-line text-lg"></i> Laporan
                 </x-nav-link>
                 
                 <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 px-3">Sistem</p>

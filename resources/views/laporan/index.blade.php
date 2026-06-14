@@ -1,6 +1,6 @@
 <x-app-layout>
-    <x-slot name="title">Pusat Laporan</x-slot>
-    <x-slot name="header">Pusat Laporan & Analisis Data</x-slot>
+    <x-slot name="title">Laporan</x-slot>
+    <x-slot name="header">Laporan & Analisis Data</x-slot>
 
     <!-- Style kustom untuk media cetak (Print Layout) -->
     <style>
