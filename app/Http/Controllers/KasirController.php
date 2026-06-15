@@ -13,7 +13,7 @@ class KasirController extends Controller
 {
     public function index()
     {
-        $barangs = Barang::where('stok', '>', 0)->get();
+        $barangs = Barang::orderByRaw('stok = 0')->orderBy('nama_barang')->get();
         return view('kasir.index', compact('barangs'));
     }
 

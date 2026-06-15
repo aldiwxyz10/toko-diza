@@ -22,6 +22,10 @@ class BarangController extends Controller
             $query->where('jenis', $request->jenis);
         }
 
+        if ($request->filled('habis') && $request->habis == '1') {
+            $query->where('stok', 0);
+        }
+
         // Sorting Logic
         $sort = $request->query('sort', 'terbaru');
         switch ($sort) {

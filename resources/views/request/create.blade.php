@@ -26,7 +26,7 @@
                                 class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors">
                             <option value="">-- Pilih Barang --</option>
                             @foreach($barangs as $b)
-                                <option value="{{ $b->id }}" {{ old('barang_id') == $b->id ? 'selected' : '' }}>
+                                <option value="{{ $b->id }}" {{ old('barang_id', request('barang_id')) == $b->id ? 'selected' : '' }}>
                                     {{ $b->kode_barang }} - {{ $b->nama_barang }} (Sisa Stok: {{ $b->stok }})
                                 </option>
                             @endforeach

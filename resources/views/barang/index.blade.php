@@ -45,6 +45,12 @@
                     @endforeach
                 </select>
 
+                <!-- Filter Barang Habis -->
+                <label class="flex items-center gap-2 cursor-pointer bg-white border border-slate-200 h-[42px] px-4 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors flex-shrink-0 {{ request('habis') == '1' ? 'bg-red-50 border-red-300' : '' }}">
+                    <input type="checkbox" name="habis" value="1" onchange="this.form.submit()" {{ request('habis') == '1' ? 'checked' : '' }} class="rounded text-red-500 focus:ring-red-500 border-slate-300 w-4 h-4">
+                    <span class="text-sm font-medium {{ request('habis') == '1' ? 'text-red-600' : 'text-slate-600' }}">Barang Habis</span>
+                </label>
+
                 <!-- Sorting Filter Button-style Dropdown (Like the Filter Button in Laporan Keluar) -->
                 @php
                     $currentSort = request('sort', 'terbaru');

@@ -79,52 +79,114 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
-            <i class="bi bi-clipboard-check text-blue-500"></i>
-            <h4 class="font-semibold text-slate-800">Status Request Stok Terakhir Anda</h4>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Kolom Kiri & Tengah: Request Stok (lg:col-span-2) -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden h-full flex flex-col">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                    <i class="bi bi-clipboard-check text-blue-500"></i>
+                    <h4 class="font-semibold text-slate-800">Status Request Stok Terakhir Anda</h4>
+                </div>
+                <div class="p-0 overflow-x-auto flex-1">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-50 text-slate-500">
+                            <tr>
+                                <th class="px-6 py-3 font-medium">Tanggal</th>
+                                <th class="px-6 py-3 font-medium">Barang</th>
+                                <th class="px-6 py-3 font-medium">Jumlah</th>
+                                <th class="px-6 py-3 font-medium">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @forelse($myRequests as $req)
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-6 py-3 text-slate-800">{{ $req->created_at->format('d M Y') }}</td>
+                                    <td class="px-6 py-3 font-medium text-slate-800">{{ $req->barang->nama_barang }}</td>
+                                    <td class="px-6 py-3">{{ $req->jumlah }}</td>
+                                    <td class="px-6 py-3">
+                                        @php
+                                            $color = match($req->status) {
+                                                'disetujui' => 'green',
+                                                'ditolak' => 'red',
+                                                default => 'amber'
+                                            };
+                                        @endphp
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-{{ $color }}-100 text-{{ $color }}-800">
+                                            {{ ucfirst($req->status) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-8 text-center text-slate-500">
+                                        <div class="flex flex-col items-center">
+                                            <i class="bi bi-inbox text-4xl text-slate-300 mb-2"></i>
+                                            <p>Anda belum membuat request stok sama sekali.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="p-0 overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="bg-slate-50 text-slate-500">
-                    <tr>
-                        <th class="px-6 py-3 font-medium">Tanggal</th>
-                        <th class="px-6 py-3 font-medium">Barang</th>
-                        <th class="px-6 py-3 font-medium">Jumlah</th>
-                        <th class="px-6 py-3 font-medium">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    @forelse($myRequests as $req)
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-3 text-slate-800">{{ $req->created_at->format('d M Y') }}</td>
-                            <td class="px-6 py-3 font-medium text-slate-800">{{ $req->barang->nama_barang }}</td>
-                            <td class="px-6 py-3">{{ $req->jumlah }}</td>
-                            <td class="px-6 py-3">
-                                @php
-                                    $color = match($req->status) {
-                                        'approved' => 'green',
-                                        'rejected' => 'red',
-                                        default => 'yellow'
-                                    };
-                                @endphp
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-{{ $color }}-100 text-{{ $color }}-800">
-                                    {{ ucfirst($req->status) }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-8 text-center text-slate-500">
-                                <div class="flex flex-col items-center">
-                                    <i class="bi bi-inbox text-4xl text-slate-300 mb-2"></i>
-                                    <p>Anda belum membuat request stok sama sekali.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+
+        <!-- Kolom Kanan: Stok Kritis (lg:col-span-1) -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden h-full flex flex-col">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="bi bi-exclamation-circle text-red-500"></i>
+                        <h4 class="font-semibold text-slate-800">Daftar Stok Kritis & Habis</h4>
+                    </div>
+                </div>
+                <div class="p-0 overflow-x-auto flex-1">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-50 text-slate-500 text-2xs tracking-wider uppercase">
+                            <tr>
+                                <th class="px-6 py-3 font-semibold">Nama Barang</th>
+                                <th class="px-6 py-3 font-semibold text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @forelse($barangKritis as $barang)
+                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                    <td class="px-6 py-3.5">
+                                        <p class="font-medium text-slate-800 leading-tight mb-1">{{ $barang->nama_barang }}</p>
+                                        <span class="font-mono text-[9px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">{{ $barang->kode_barang }}</span>
+                                    </td>
+                                    <td class="px-6 py-3.5 text-center">
+                                        @if($barang->stok === 0)
+                                            <div class="flex flex-col items-center gap-1.5">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200">
+                                                    HABIS (0)
+                                                </span>
+                                                <a href="{{ route('request.create', ['barang_id' => $barang->id]) }}" class="text-[10px] font-bold text-blue-600 hover:text-blue-800 hover:underline">
+                                                    Restock <i class="bi bi-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                        @else
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                                SISA {{ $barang->stok }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="px-6 py-12 text-center text-slate-500">
+                                        <div class="flex flex-col items-center">
+                                            <i class="bi bi-check-circle text-3xl text-green-400 mb-2"></i>
+                                            <p class="text-xs">Semua stok barang aman.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

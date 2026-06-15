@@ -21,8 +21,11 @@
             
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 @foreach($barangs as $barang)
-                    <div class="flex flex-col items-center p-4 border border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-sm transition-all text-center bg-white h-full relative" id="card-{{ $barang->id }}">
-                        <i class="bi bi-box-seam text-3xl text-slate-400 mb-2"></i>
+                    <div class="flex flex-col items-center p-4 border rounded-xl transition-all text-center h-full relative 
+                        {{ $barang->stok == 0 ? 'bg-red-50/30 border-red-400' : 'bg-white border-slate-200 hover:border-blue-500 hover:shadow-sm' }}" 
+                        id="card-{{ $barang->id }}">
+
+                        <i class="bi bi-box-seam text-3xl {{ $barang->stok == 0 ? 'text-red-300' : 'text-slate-400' }} mb-2"></i>
                         <span class="font-medium text-slate-700 text-sm line-clamp-2 leading-tight mb-0.5">{{ $barang->nama_barang }}</span>
                         @if($barang->deskripsi)
                             <span class="text-[10px] text-slate-400 line-clamp-1 mb-1 max-w-full px-1" title="{{ $barang->deskripsi }}">
@@ -31,19 +34,35 @@
                         @else
                             <span class="text-[10px] text-slate-300 italic mb-1">Tanpa spesifikasi</span>
                         @endif
-                        <span class="text-xs text-slate-500 mb-1">Stok: {{ $barang->stok }}</span>
-                        <span class="font-semibold text-blue-600 mb-3">Rp {{ number_format($barang->harga, 0, ',', '.') }}</span>
+                        
+                        @if($barang->stok == 0)
+                            <span class="text-xs text-red-600 font-bold mb-1">Stok Habis</span>
+                        @else
+                            <span class="text-xs text-slate-500 mb-1">Stok: {{ $barang->stok }}</span>
+                        @endif
+                        
+                        <span class="font-semibold {{ $barang->stok == 0 ? 'text-red-500' : 'text-blue-600' }} mb-3">Rp {{ number_format($barang->harga, 0, ',', '.') }}</span>
                         
                         <div class="mt-auto w-full pt-2">
-                            <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 w-full justify-between">
-                                <button type="button" onclick="updateQty('{{ $barang->id }}', -1, '{{ addslashes($barang->nama_barang) }}', {{ $barang->harga }}, {{ $barang->stok }})" class="w-8 h-8 flex items-center justify-center rounded bg-white shadow-sm border border-slate-200 hover:bg-slate-100 hover:text-red-600 transition-colors">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <span class="font-bold w-8 text-center text-slate-800" id="qty-{{ $barang->id }}">0</span>
-                                <button type="button" onclick="updateQty('{{ $barang->id }}', 1, '{{ addslashes($barang->nama_barang) }}', {{ $barang->harga }}, {{ $barang->stok }})" class="w-8 h-8 flex items-center justify-center rounded bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
+                            @if($barang->stok == 0)
+                                <a href="{{ route('request.create', ['barang_id' => $barang->id]) }}" class="w-full py-1.5 flex items-center justify-center rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition-colors text-xs font-bold gap-1 border border-red-200 shadow-sm relative z-20">
+                                    <i class="bi bi-box-arrow-in-right"></i> Ajukan Restock
+                                </a>
+                            @else
+                                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 w-full justify-between relative z-20">
+                                    <button type="button" 
+                                        onclick="updateQty('{{ $barang->id }}', -1, '{{ addslashes($barang->nama_barang) }}', {{ $barang->harga }}, {{ $barang->stok }})" 
+                                        class="w-8 h-8 flex items-center justify-center rounded bg-white shadow-sm border border-slate-200 transition-colors hover:bg-slate-100 hover:text-red-600">
+                                        <i class="bi bi-dash"></i>
+                                    </button>
+                                    <span class="font-bold w-8 text-center text-slate-800" id="qty-{{ $barang->id }}">0</span>
+                                    <button type="button" 
+                                        onclick="updateQty('{{ $barang->id }}', 1, '{{ addslashes($barang->nama_barang) }}', {{ $barang->harga }}, {{ $barang->stok }})" 
+                                        class="w-8 h-8 flex items-center justify-center rounded text-white shadow-sm transition-colors bg-blue-600 hover:bg-blue-700">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach
