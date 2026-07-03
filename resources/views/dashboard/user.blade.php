@@ -2,9 +2,7 @@
     <x-slot name="title">Beranda User</x-slot>
     <x-slot name="header">Beranda</x-slot>
 
-    <!-- Spanduk Selamat Datang Premium -->
     <div class="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-700 rounded-2xl p-6 md:p-8 text-white mb-6 overflow-hidden shadow-md">
-        <!-- Decorative background circles -->
         <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
         <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
         
